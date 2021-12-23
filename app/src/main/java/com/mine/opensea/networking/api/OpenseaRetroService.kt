@@ -1,13 +1,8 @@
-package com.mine.opensea.Networking
+package com.mine.opensea.networking.api
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import okhttp3.Cache
 import okhttp3.OkHttpClient
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
 
 interface OpenseaRetroService {
 
