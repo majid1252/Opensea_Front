@@ -48,8 +48,6 @@ abstract class OpenseaDatabase : RoomDatabase() {
             }
         }
 
-        // Create and pre-populate the database. See this article for more details:
-        // https://medium.com/google-developers/7-pro-tips-for-room-fbadea4bfbd1#4785
         private fun buildDatabase(context: Context): OpenseaDatabase {
             return Room.databaseBuilder(context, OpenseaDatabase::class.java, "DATABASE_NAME")
                 .addCallback(

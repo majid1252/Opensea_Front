@@ -1,10 +1,12 @@
 package com.mine.opensea.database.models
 
+import androidx.room.Embedded
 import androidx.room.Entity
+import com.google.common.math.Stats
 import com.google.gson.annotations.SerializedName
 
 @Entity
-data class Collection(
+data class CollectionModel(
 
     @field:SerializedName("short_description")
     val shortDescription: Any? = null,
@@ -12,8 +14,9 @@ data class Collection(
     @field:SerializedName("featured")
     val featured: Boolean? = null,
 
+    @Embedded
     @field:SerializedName("traits")
-    val traits: Traits? = null,
+    val traits: TraitsModel? = null,
 
     @field:SerializedName("hidden")
     val hidden: Boolean? = null,
@@ -48,6 +51,7 @@ data class Collection(
     @field:SerializedName("payout_address")
     val payoutAddress: Any? = null,
 
+    @Embedded
     @field:SerializedName("stats")
     val stats: Stats? = null,
 
@@ -84,8 +88,9 @@ data class Collection(
     @field:SerializedName("telegram_url")
     val telegramUrl: Any? = null,
 
+    @Embedded
     @field:SerializedName("display_data")
-    val displayData: DisplayData? = null,
+    val displayData: DisplayDataModel? = null,
 
     @field:SerializedName("name")
     val name: String? = null,
@@ -104,83 +109,4 @@ data class Collection(
 
     @field:SerializedName("dev_buyer_fee_basis_points")
     val devBuyerFeeBasisPoints: String? = null
-)
-
-data class Traits(
-    val any: Any? = null
-)
-
-data class DisplayData(
-
-    @field:SerializedName("images")
-    val images: List<Any?>? = null,
-
-    @field:SerializedName("card_display_style")
-    val cardDisplayStyle: String? = null
-)
-
-data class Stats(
-
-    @field:SerializedName("num_reports")
-    val numReports: Int? = null,
-
-    @field:SerializedName("one_day_average_price")
-    val oneDayAveragePrice: Int? = null,
-
-    @field:SerializedName("seven_day_average_price")
-    val sevenDayAveragePrice: Int? = null,
-
-    @field:SerializedName("thirty_day_volume")
-    val thirtyDayVolume: Int? = null,
-
-    @field:SerializedName("total_volume")
-    val totalVolume: Int? = null,
-
-    @field:SerializedName("thirty_day_average_price")
-    val thirtyDayAveragePrice: Int? = null,
-
-    @field:SerializedName("one_day_volume")
-    val oneDayVolume: Int? = null,
-
-    @field:SerializedName("total_supply")
-    val totalSupply: Int? = null,
-
-    @field:SerializedName("seven_day_sales")
-    val sevenDaySales: Int? = null,
-
-    @field:SerializedName("count")
-    val count: Int? = null,
-
-    @field:SerializedName("average_price")
-    val averagePrice: Int? = null,
-
-    @field:SerializedName("one_day_sales")
-    val oneDaySales: Int? = null,
-
-    @field:SerializedName("seven_day_change")
-    val sevenDayChange: Int? = null,
-
-    @field:SerializedName("thirty_day_sales")
-    val thirtyDaySales: Int? = null,
-
-    @field:SerializedName("seven_day_volume")
-    val sevenDayVolume: Int? = null,
-
-    @field:SerializedName("one_day_change")
-    val oneDayChange: Int? = null,
-
-    @field:SerializedName("market_cap")
-    val marketCap: Int? = null,
-
-    @field:SerializedName("thirty_day_change")
-    val thirtyDayChange: Int? = null,
-
-    @field:SerializedName("num_owners")
-    val numOwners: Int? = null,
-
-    @field:SerializedName("total_sales")
-    val totalSales: Int? = null,
-
-    @field:SerializedName("floor_price")
-    val floorPrice: Int? = null
 )
