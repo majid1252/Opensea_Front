@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.sunflower.data
+package com.mine.opensea.database
 
 import android.content.Context
 import androidx.room.Database
@@ -22,15 +22,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.mine.opensea.database.RoomTypeConvertors
 import com.mine.opensea.database.daos.CollectionDao
-import com.mine.opensea.database.models.Collection
+import com.mine.opensea.database.models.CollectionModel
 
 /**
  * initializing room database to store and retrieve data
  */
 
-@Database(entities = [Collection::class], version = 1, exportSchema = false)
+@Database(entities = [CollectionModel::class], version = 2, exportSchema = false)
 @TypeConverters(RoomTypeConvertors::class)
 abstract class OpenseaDatabase : RoomDatabase() {
 
@@ -44,12 +43,15 @@ abstract class OpenseaDatabase : RoomDatabase() {
 
         fun getInstance(context: Context): OpenseaDatabase {
             return instance ?: synchronized(this) {
-                instance ?: buildDatabase(context).also { instance = it }
+                instance ?: buildInMemoryDatabase(context).also { instance = it }
             }
         }
 
-        private fun buildDatabase(context: Context): OpenseaDatabase {
-            return Room.databaseBuilder(context, OpenseaDatabase::class.java, "DATABASE_NAME")
+        /**
+         * create inMemoryDatabase to test Apis
+         */
+        private fun buildInMemoryDatabase(context: Context): OpenseaDatabase {
+            return Room.inMemoryDatabaseBuilder(context, OpenseaDatabase::class.java)
                 .addCallback(
                     object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {

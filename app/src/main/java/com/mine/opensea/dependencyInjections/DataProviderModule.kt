@@ -1,7 +1,7 @@
 package com.mine.opensea.dependencyInjections
 
 import android.content.Context
-import com.google.samples.apps.sunflower.data.OpenseaDatabase
+import com.mine.opensea.database.OpenseaDatabase
 import com.mine.opensea.database.daos.CollectionDao
 import dagger.Module
 import dagger.Provides

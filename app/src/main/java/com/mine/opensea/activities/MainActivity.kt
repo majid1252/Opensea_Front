@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import com.mine.opensea.R
@@ -23,11 +24,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        OpenseaRetroService.create().getCollections(0, 10)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnError { throwable -> throwable.message?.let { Log.d("error==", it) } }
-            .doOnNext { Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show() }
-            .subscribe()
+        collectionListViewModel.collectionsModel.observe(
+            this,
+            Observer {
+                for (i in it)
+                    Toast.makeText(this, i.name.toString(), Toast.LENGTH_LONG).show()
+            })
     }
 }
