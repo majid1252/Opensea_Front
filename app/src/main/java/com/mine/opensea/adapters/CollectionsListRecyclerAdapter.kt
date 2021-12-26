@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mine.opensea.R
-import com.mine.opensea.database.models.CollectionModel
+import com.mine.opensea.database.models.Collection
 import com.mine.opensea.databinding.CollectionViewHolderBinding
 
 class CollectionsListRecyclerAdapter() :
-        ListAdapter<CollectionModel, CollectionsListRecyclerAdapter.ViewHolder>(
+        ListAdapter<Collection, CollectionsListRecyclerAdapter.ViewHolder>(
             CollectionItemDiffCallback()
         ) {
 
@@ -28,18 +28,18 @@ class CollectionsListRecyclerAdapter() :
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = CollectionViewHolderBinding.bind(itemView)
-        public fun bindTo(collectionModel: CollectionModel) {
-            binding.nameTextView.text = collectionModel.name
+        public fun bindTo(collection: Collection) {
+            binding.nameTextView.text = collection.name
         }
     }
 
-    class CollectionItemDiffCallback : DiffUtil.ItemCallback<CollectionModel>() {
-        override fun areItemsTheSame(oldItem: CollectionModel, newItem: CollectionModel): Boolean =
+    class CollectionItemDiffCallback : DiffUtil.ItemCallback<Collection>() {
+        override fun areItemsTheSame(oldItem: Collection, newItem: Collection): Boolean =
             oldItem == newItem
 
         override fun areContentsTheSame(
-                oldItem: CollectionModel,
-                newItem: CollectionModel
+                oldItem: Collection,
+                newItem: Collection
         ): Boolean = oldItem == newItem
 
     }

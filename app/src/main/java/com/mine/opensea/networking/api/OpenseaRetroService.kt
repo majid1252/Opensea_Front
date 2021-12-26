@@ -8,8 +8,8 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
-import java.util.*
 
 interface OpenseaRetroService {
 
@@ -17,11 +17,16 @@ interface OpenseaRetroService {
      * these are all opensea.io methods for retrieving Collections, Assets and Stats
      * nothing more
      */
-
     @GET("/collections")
     fun getCollections(
             @Query("offset") offset: Int,
             @Query("limit") limit: Int
+    ): Observable<CollectionsModel>
+
+    @GET("/asset/{asset_contract_address}/{token_id}/")
+    fun getAsset(
+            @Path("asset_contract_address") assetContractAddress: String,
+            @Path("token_id") tokenId: Int
     ): Observable<CollectionsModel>
 
     companion object {

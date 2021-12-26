@@ -3,11 +3,10 @@ package com.mine.opensea.database.models
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.common.math.Stats
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "collections_table")
-data class CollectionModel(
+data class Collection(
 
         @field:SerializedName("external_url")
         val externalUrl: String? = null,
@@ -17,10 +16,14 @@ data class CollectionModel(
 
         @field:SerializedName("featured")
         val featured: Boolean? = null,
-        //
-        //    @Embedded
-        //    @field:SerializedName("traits")
-        //    val traits: TraitsModel? = null,
+
+        /** there is problem with opensea api which returns different types...
+         *...for single field [traits] so for now just got commented.
+
+        @field:SerializedName("traits")
+        val traits: List<Trait>? = null,
+
+         */
 
         @field:SerializedName("hidden")
         val hidden: Boolean? = null,
@@ -31,8 +34,8 @@ data class CollectionModel(
         @field:SerializedName("twitter_username")
         val twitterUsername: String? = null,
 
-        //    @field:SerializedName("primary_asset_contracts")
-        //    val primaryAssetContracts: List<String?>? = null,
+        @field:SerializedName("primary_asset_contracts")
+        val primaryAssetContracts: List<String?>? = null,
 
         @field:SerializedName("default_to_fiat")
         val defaultToFiat: Boolean? = null,
@@ -52,9 +55,9 @@ data class CollectionModel(
         @field:SerializedName("payout_address")
         val payoutAddress: String? = null,
 
-        //        @Embedded
-        //        @field:SerializedName("stats")
-        //        val stats: Stats? = null,
+        @Embedded
+        @field:SerializedName("stats")
+        val stats: Stats? = null,
 
         @field:SerializedName("opensea_seller_fee_basis_points")
         val openseaSellerFeeBasisPoints: String? = null,
@@ -88,10 +91,11 @@ data class CollectionModel(
 
         @field:SerializedName("telegram_url")
         val telegramUrl: String? = null,
-        //
-        //    @Embedded
-        //    @field:SerializedName("display_data")
-        //    val displayData: DisplayDataModel? = null,
+
+        @Embedded
+        @field:SerializedName("display_data")
+        val displayData: DisplayData? = null,
+
         @PrimaryKey
         @field:SerializedName("name")
         val name: String,
