@@ -17,7 +17,8 @@ data class Collection(
         @field:SerializedName("featured")
         val featured: Boolean? = null,
 
-        /** there is problem with opensea api which returns different types...
+        /**
+         * there is problem with opensea api which returns different types...
          *...for single field [traits] so for now just got commented.
 
         @field:SerializedName("traits")

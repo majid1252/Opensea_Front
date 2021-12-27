@@ -35,6 +35,14 @@ class CollectionListViewModel @Inject constructor(
             .doOnError { throwable -> println(throwable.message) }
             .subscribe()
 
-
+        //        openseaRetroService.getCollection("doodles-official")
+        //            .subscribeOn(Schedulers.io())
+        //
+        //            .share()
+        //            .doOnNext { it ->
+        //                Log.d("collect_size", it.collection.toString())
+        //            }
+        //            .doOnError { throwable -> println(throwable.message) }
+        //            .subscribe()
     }
 }

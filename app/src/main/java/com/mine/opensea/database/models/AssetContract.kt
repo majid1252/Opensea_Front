@@ -4,6 +4,14 @@ import com.google.gson.annotations.SerializedName
 
 data class AssetContract(
 
+        /**
+         * AssetContract is used in many places many of these fields are not used always...
+         * ...at the same time such as [collection] which is only filled when calling...
+         * ...getAssetContract api from retrofit
+         */
+        @field:SerializedName("collection")
+        val collection: Collection? = null,
+
         @field:SerializedName("owner")
         val owner: Any? = null,
 
