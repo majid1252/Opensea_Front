@@ -1,6 +1,6 @@
 package com.mine.opensea.networking.api
 
-import com.mine.opensea.networking.CollectionJsonConvertor
+import com.google.gson.GsonBuilder
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -10,11 +10,9 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import com.google.gson.Gson
 
-import com.google.gson.GsonBuilder
 import com.mine.opensea.database.models.*
-import com.mine.opensea.database.models.Collection
+import com.mine.opensea.networking.UserJsonConvertor
 
 
 interface OpenseaRetroService {
@@ -22,11 +20,11 @@ interface OpenseaRetroService {
     /**
      * these are all opensea.io methods for retrieving Collections, Assets and Stats
      */
-    @GET("/collections")
+    @GET("/collections/")
     fun getCollections(
-            @Query("offset") offset: Int,
-            @Query("asset_owner") assetOwner: Int,
-            @Query("limit") limit: Int
+            @Query("offset") offset: Int = 0,
+            @Query("asset_owner") assetOwner: String? = null,
+            @Query("limit") limit: Int = 20
     ): Observable<Collections>
 
 
@@ -37,10 +35,10 @@ interface OpenseaRetroService {
     fun getAssets(
             @Query("offset") offset: Int = 0,
             @Query("limit") limit: Int = 10,
-            @Query("collection") collectionSlug: String = "",
-            @Query("owner") owner: String = "",
-            @Query("order_by") orderBy: String = "",
-            @Query("order_direction") orderDirection: String = "",
+            @Query("collection") collectionSlug: String? = null,
+            @Query("owner") owner: String? = null,
+            @Query("order_by") orderBy: String? = null,
+            @Query("order_direction") orderDirection: String? = null,
     ): Observable<List<Asset>>
 
 
@@ -49,7 +47,7 @@ interface OpenseaRetroService {
      */
     @GET("/asset/{asset_contract_address}/{token_id}/")
     fun getAsset(
-            @Path("asset_contract_address") assetContractAddress: String,
+            @Path("asset_contract_address") assetContractAddress: String? = null,
             @Path("token_id") tokenId: Int
     ): Observable<Asset>
 
@@ -59,7 +57,7 @@ interface OpenseaRetroService {
      */
     @GET("/asset_contract/{asset_contract_address}/")
     fun getAssetByContract(
-            @Path("asset_contract_address") assetContractAddress: String
+            @Path("asset_contract_address") assetContractAddress: String? = null
     ): Observable<AssetContract>
 
 
@@ -68,8 +66,8 @@ interface OpenseaRetroService {
      */
     @GET("/collection/{collection_slug}/")
     fun getCollection(
-            @Path("collection_slug") assetContractAddress: String
-    ): Observable<CollectionContainer>
+            @Path("collection_slug") slug: String? = null
+    ): Observable<CollectionsContainer>
 
 
     /**
@@ -77,8 +75,22 @@ interface OpenseaRetroService {
      */
     @GET("collection/{collection_slug}/stats")
     fun getCollectionStats(
-            @Path("collection_slug") assetContractAddress: String
+            @Path("collection_slug") slug: String? = null
     ): Observable<StatsContainer>
+
+
+    /**
+     * Use this endpoint to fetch stats for a specific collection, including realtime floor price statistics
+     */
+    @GET("bundles/")
+    fun getBundles(
+            @Query("collection_slug") collectionSlug: String? = null,
+            @Query("offset") offset: Int = 0,
+            @Query("limit") limit: Int = 10,
+            @Query("on_sale") onSale: Boolean? = null,
+            @Query("owner") owner: String? = null,
+            @Query("asset_contract_address") assetContractAddress: String? = null
+    ): Observable<BundlesContainer>
 
 
     /**
@@ -91,8 +103,12 @@ interface OpenseaRetroService {
 
             val client = OkHttpClient.Builder().build()
 
+            val gson = GsonBuilder()
+                .registerTypeAdapter(User::class.java, UserJsonConvertor())
+                .create()
+
             return Retrofit.Builder().baseUrl(BASE_URL).client(client)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .addConverterFactory(ScalarsConverterFactory.create()).build()
                 .create(OpenseaRetroService::class.java)

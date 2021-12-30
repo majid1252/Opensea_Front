@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mine.opensea.database.models.Collection
+import com.mine.opensea.database.models.PrimaryAssetContract
 import com.mine.opensea.database.models.Trait
 
 class RoomTypeConvertors {
@@ -16,6 +17,18 @@ class RoomTypeConvertors {
     @TypeConverter
     fun toCollectionsList(countryLangString: String?): List<Collection> {
         val type = object : TypeToken<List<Collection>>() {}.type
+        return Gson().fromJson(countryLangString, type)
+    }
+
+    @TypeConverter
+    fun fromPrimaryAssetContractsList(countryLang: List<PrimaryAssetContract>): String? {
+        val type = object : TypeToken<List<PrimaryAssetContract>>() {}.type
+        return Gson().toJson(countryLang, type)
+    }
+
+    @TypeConverter
+    fun toPrimaryAssetContractList(countryLangString: String?): List<PrimaryAssetContract> {
+        val type = object : TypeToken<List<PrimaryAssetContract>>() {}.type
         return Gson().fromJson(countryLangString, type)
     }
 

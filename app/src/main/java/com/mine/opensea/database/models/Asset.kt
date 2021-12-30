@@ -53,7 +53,7 @@ data class Asset(
         val auctions: List<Any?>? = null,
 
         @field:SerializedName("owner")
-        val owner: Owner? = null,
+        val owner: User? = null,
 
         @field:SerializedName("is_presale")
         val isPresale: Boolean? = null,

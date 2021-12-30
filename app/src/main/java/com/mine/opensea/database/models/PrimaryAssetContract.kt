@@ -2,7 +2,7 @@ package com.mine.opensea.database.models
 
 import com.google.gson.annotations.SerializedName
 
-data class PrimaryAssetContractsItem(
+data class PrimaryAssetContract(
 
         @field:SerializedName("owner")
         val owner: Any? = null,

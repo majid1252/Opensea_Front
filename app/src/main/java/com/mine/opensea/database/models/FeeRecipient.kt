@@ -2,7 +2,7 @@ package com.mine.opensea.database.models
 
 import com.google.gson.annotations.SerializedName
 
-data class Owner(
+data class FeeRecipient(
 
         @field:SerializedName("address")
         val address: String? = null,
@@ -11,7 +11,7 @@ data class Owner(
         val profileImgUrl: String? = null,
 
         @field:SerializedName("user")
-        val user: Any? = null,
+        val user: Int? = null,
 
         @field:SerializedName("config")
         val config: String? = null

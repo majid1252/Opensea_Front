@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class Stats(
 
         @field:SerializedName("num_reports")
-        val numReports: Int? = null,
+        val numReports: Double? = null,
 
         @field:SerializedName("one_day_average_price")
         val oneDayAveragePrice: Double? = null,
@@ -27,25 +27,25 @@ data class Stats(
         val oneDayVolume: Double? = null,
 
         @field:SerializedName("total_supply")
-        val totalSupply: Int? = null,
+        val totalSupply: Double? = null,
 
         @field:SerializedName("seven_day_sales")
-        val sevenDaySales: Int? = null,
+        val sevenDaySales: Double? = null,
 
         @field:SerializedName("count")
-        val count: Int? = null,
+        val count: Double? = null,
 
         @field:SerializedName("average_price")
         val averagePrice: Double? = null,
 
         @field:SerializedName("one_day_sales")
-        val oneDaySales: Int? = null,
+        val oneDaySales: Double? = null,
 
         @field:SerializedName("seven_day_change")
         val sevenDayChange: Double? = null,
 
         @field:SerializedName("thirty_day_sales")
-        val thirtyDaySales: Int? = null,
+        val thirtyDaySales: Double? = null,
 
         @field:SerializedName("seven_day_volume")
         val sevenDayVolume: Double? = null,
@@ -60,11 +60,11 @@ data class Stats(
         val thirtyDayChange: Double? = null,
 
         @field:SerializedName("num_owners")
-        val numOwners: Int? = null,
+        val numOwners: Double? = null,
 
         @field:SerializedName("total_sales")
-        val totalSales: Int? = null,
+        val totalSales: Double? = null,
 
         @field:SerializedName("floor_price")
-        val floorPrice: Int? = null
+        val floorPrice: Double? = null
 )

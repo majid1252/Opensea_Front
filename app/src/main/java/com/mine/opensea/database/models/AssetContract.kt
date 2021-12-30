@@ -4,16 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 data class AssetContract(
 
-        /**
-         * AssetContract is used in many places many of these fields are not used always...
-         * ...at the same time such as [collection] which is only filled when calling...
-         * ...getAssetContract api from retrofit
-         */
-        @field:SerializedName("collection")
-        val collection: Collection? = null,
-
         @field:SerializedName("owner")
-        val owner: Any? = null,
+        val owner: Int? = null,
 
         @field:SerializedName("symbol")
         val symbol: String? = null,
@@ -28,7 +20,7 @@ data class AssetContract(
         val openseaVersion: Any? = null,
 
         @field:SerializedName("total_supply")
-        val totalSupply: Any? = null,
+        val totalSupply: String? = null,
 
         @field:SerializedName("image_url")
         val imageUrl: String? = null,
@@ -41,6 +33,9 @@ data class AssetContract(
 
         @field:SerializedName("opensea_buyer_fee_basis_points")
         val openseaBuyerFeeBasisPoints: Int? = null,
+
+        @field:SerializedName("collection")
+        val collection: Collection? = null,
 
         @field:SerializedName("schema_name")
         val schemaName: String? = null,
