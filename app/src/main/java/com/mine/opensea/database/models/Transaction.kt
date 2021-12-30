@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class Transaction(
 
         @field:SerializedName("from_account")
-        val fromAccount: FromAccount? = null,
+        val fromAccount: User? = null,
 
         @field:SerializedName("block_hash")
         val blockHash: String? = null,

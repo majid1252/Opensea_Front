@@ -29,14 +29,14 @@ class UserJsonConvertor : JsonDeserializer<User> {
 
         val jsonObject = json.asJsonObject
 
-        if (json.isJsonObject && json.asJsonObject.get("user").isJsonObject) {
+        if (json.isJsonObject && json.asJsonObject.get("user")?.isJsonObject!!) {
             return userObject.apply {
                 address = jsonObject.get("address").toString()
                 profileImgUrl = jsonObject.get("profile_img_url").toString()
                 user = Username(jsonObject.get("user").asJsonObject.get("username").toString())
                 config = jsonObject.get("config").toString()
             }
-        } else if (json.isJsonObject && json.asJsonObject.get("user").isJsonPrimitive) {
+        } else if (json.isJsonObject && json.asJsonObject.get("user")?.isJsonPrimitive!!) {
             return userObject.apply {
                 address = jsonObject.get("address").toString()
                 profileImgUrl = jsonObject.get("profile_img_url").toString()

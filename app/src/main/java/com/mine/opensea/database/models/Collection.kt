@@ -35,7 +35,7 @@ data class Collection(
         val twitterUsername: String? = null,
 
         @field:SerializedName("primary_asset_contracts")
-        val primaryAssetContracts: List<String?>? = null,
+        val primaryAssetContracts: List<PrimaryAssetContract?>? = null,
 
         @field:SerializedName("default_to_fiat")
         val defaultToFiat: Boolean? = null,
