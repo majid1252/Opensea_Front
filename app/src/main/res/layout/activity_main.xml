@@ -3,10 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/root_view"
+    android:background="@drawable/ic_launcher_background"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/collection_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/blurView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="8dp"
+        android:elevation="20dp"
+        android:background="@drawable/rounded_blur_app_bar_out_liner"
+        android:outlineProvider="background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.98"
+        tools:layout_editor_absoluteX="36dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="this not blurred"
+            android:textSize="50sp" />
+    </eightbitlab.com.blurview.BlurView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
