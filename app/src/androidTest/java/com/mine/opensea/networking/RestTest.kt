@@ -38,7 +38,7 @@ class RestTest {
             .subscribeOn(Schedulers.io())
             .share()
             .doOnNext {
-                println(it)
+                println("getAsset success::$it")
             }
             .doOnError { throwable ->
                 println("getAsset error::" + (throwable as HttpException).message)

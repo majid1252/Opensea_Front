@@ -1,8 +1,15 @@
 package com.mine.opensea.database.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "assets_table")
 data class Asset(
+
+        @PrimaryKey
+        @field:SerializedName("token_id")
+        val tokenId: String? = null,
 
         @field:SerializedName("top_bid")
         val topBid: Any? = null,
@@ -23,7 +30,7 @@ data class Asset(
         val supportsWyvern: Boolean? = null,
 
         @field:SerializedName("asset_contract")
-        val assetContract: AssetContract? = null,
+        val assetContract: PrimaryAssetContract? = null,
 
         @field:SerializedName("last_sale")
         val lastSale: LastSale? = null,
@@ -33,9 +40,6 @@ data class Asset(
 
         @field:SerializedName("highest_buyer_commitment")
         val highestBuyerCommitment: Any? = null,
-
-        @field:SerializedName("token_id")
-        val tokenId: String? = null,
 
         @field:SerializedName("transfer_fee_payment_token")
         val transferFeePaymentToken: Any? = null,
@@ -62,7 +66,7 @@ data class Asset(
         val animationUrl: Any? = null,
 
         @field:SerializedName("creator")
-        val creator: Creator? = null,
+        val creator: User? = null,
 
         @field:SerializedName("num_sales")
         val numSales: Int? = null,

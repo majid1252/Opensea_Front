@@ -31,7 +31,7 @@ interface OpenseaRetroService {
     /**
      * To retrieve assets from our API, call the /assets endpoint with the desired filter parameters.
      */
-    @GET("/collections")
+    @GET("/assets/")
     fun getAssets(
             @Query("offset") offset: Int = 0,
             @Query("limit") limit: Int = 10,
@@ -39,7 +39,7 @@ interface OpenseaRetroService {
             @Query("owner") owner: String? = null,
             @Query("order_by") orderBy: String? = null,
             @Query("order_direction") orderDirection: String? = null,
-    ): Observable<List<Asset>>
+    ): Observable<AssetsContainer>
 
 
     /**
@@ -58,7 +58,7 @@ interface OpenseaRetroService {
     @GET("/asset_contract/{asset_contract_address}/")
     fun getAssetByContract(
             @Path("asset_contract_address") assetContractAddress: String? = null
-    ): Observable<AssetContract>
+    ): Observable<PrimaryAssetContract>
 
 
     /**

@@ -1,14 +1,16 @@
 package com.mine.opensea.database.models
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "bundles_table")
 data class Bundle(
 
         @field:SerializedName("sell_orders")
         val sellOrders: List<SellOrdersItem?>? = null,
 
         @field:SerializedName("assets")
-        val assets: List<AssetsItem?>? = null,
+        val assets: List<Asset?>? = null,
 
         @field:SerializedName("name")
         val name: String? = null,
@@ -29,7 +31,7 @@ data class Bundle(
         val externalLink: Any? = null,
 
         @field:SerializedName("asset_contract")
-        val assetContract: AssetContract? = null,
+        val assetContract: PrimaryAssetContract? = null,
 
         @field:SerializedName("schemas")
         val schemas: List<String?>? = null
