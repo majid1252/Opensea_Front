@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun blur() {
-        val radius = 5f
+        val radius = 25f
 
         val decorView = window.decorView
         //ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
@@ -76,18 +76,6 @@ class MainActivity : AppCompatActivity() {
             .setHasFixedTransformationMatrix(true)
         binding.blurView.outlineProvider = ViewOutlineProvider.BACKGROUND;
         binding.blurView.clipToOutline = true;
-
-        binding.blurView2.setupWith(binding.rootView)
-            .setFrameClearDrawable(windowBackground)
-            .setBlurAlgorithm(RenderScriptBlur(this))
-            .setBlurRadius(25f)
-            .setBlurAutoUpdate(true)
-            .setHasFixedTransformationMatrix(true)
-        binding.blurView2.outlineProvider = ViewOutlineProvider.BACKGROUND;
-        binding.blurView2.clipToOutline = true;
-        //        binding.blurView.setOverlayColor(
-        //           Color.argb(0.1f, 80f, 80f, 80f)
-        //        )
 
     }
 
