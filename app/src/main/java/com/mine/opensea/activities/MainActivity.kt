@@ -76,10 +76,18 @@ class MainActivity : AppCompatActivity() {
             .setHasFixedTransformationMatrix(true)
         binding.blurView.outlineProvider = ViewOutlineProvider.BACKGROUND;
         binding.blurView.clipToOutline = true;
-        binding.blurView.setOverlayColor(
-            Color.argb(0.1f, 80f, 80f, 80f)
-        )
-        // Or false if it's in a s
+
+        binding.blurView2.setupWith(binding.rootView)
+            .setFrameClearDrawable(windowBackground)
+            .setBlurAlgorithm(RenderScriptBlur(this))
+            .setBlurRadius(25f)
+            .setBlurAutoUpdate(true)
+            .setHasFixedTransformationMatrix(true)
+        binding.blurView2.outlineProvider = ViewOutlineProvider.BACKGROUND;
+        binding.blurView2.clipToOutline = true;
+        //        binding.blurView.setOverlayColor(
+        //           Color.argb(0.1f, 80f, 80f, 80f)
+        //        )
 
     }
 

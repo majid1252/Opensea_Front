@@ -24,7 +24,7 @@ fun ImageView.getDominantColor(): Int {
     val bitmap = (drawable as BitmapDrawable).bitmap
     var vibrant: Int = R.color.accent_color
     Palette.from(bitmap).generate { palette ->
-        vibrant = palette?.getVibrantColor(0x000000)!! // <=== color you want
+        vibrant = palette?.getVibrantColor(0x000000)!!
     }
     return vibrant
 }
