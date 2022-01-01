@@ -25,12 +25,14 @@
     <!--        app:layout_constraintStart_toStartOf="parent"-->
     <!--        app:layout_constraintTop_toTopOf="@+id/collection_recycler_view">-->
 
-    <carbon.widget.ImageView
+    <carbon.widget.TextView
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:background="@android:color/transparent"
         android:elevation="40dp"
         android:outlineProvider="bounds"
+        android:text="Lobster"
+        android:gravity="center"
         android:src="@drawable/ic_launcher_background"
         app:carbon_cornerRadius="36dp"
         app:carbon_elevationAmbientShadowColor="@color/carbon_green_900"
