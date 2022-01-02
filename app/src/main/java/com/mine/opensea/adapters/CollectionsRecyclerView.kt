@@ -10,8 +10,8 @@ import com.mine.opensea.R
 import com.mine.opensea.database.models.Collection
 import com.mine.opensea.databinding.CollectionViewHolderBinding
 
-class CollectionsListRecyclerAdapter() :
-        ListAdapter<Collection, CollectionsListRecyclerAdapter.ViewHolder>(
+class CollectionsRecyclerView() :
+        ListAdapter<Collection, CollectionsRecyclerView.ViewHolder>(
             CollectionItemDiffCallback()
         ) {
 
