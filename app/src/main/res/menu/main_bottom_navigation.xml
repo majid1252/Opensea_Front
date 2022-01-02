@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/page_1"
-        android:enabled="true" />
+        android:id="@+id/tab_bundles"
+        android:enabled="true"
+        android:title="bundles" />
     <item
-        android:id="@+id/page_2"
-        android:enabled="true" />
+        android:id="@+id/tab_collections"
+        android:enabled="true"
+        android:title="collections" />
+    <item
+        android:id="@+id/tab_assets"
+        android:enabled="true"
+        android:title="assets" />
+    <item
+        android:id="@+id/tab_my_assets"
+        android:enabled="true"
+        android:title="mine" />
 </menu>

@@ -24,24 +24,24 @@ class CollectionListViewModel @Inject constructor(
 
     init {
 
-        openseaRetroService.getCollections()
-            .subscribeOn(Schedulers.io())
-            .flatMapCompletable { it ->
-                Log.d("collect_size", it.collections[15].slug.toString())
-                collectionDao.insertCollections(it.collections)
-            }
-            .andThen(
-                collectionDao.getCollections()
-            )
-            .share()
-            .doOnNext { it ->
-                Log.d("collect_size", it.size.toString())
-                collectionsModel.postValue(it)
-            }
-            .doOnError { throwable ->
-                println("getCollections error::" + (throwable as HttpException).message)
-            }
-            .subscribe()
+        //        openseaRetroService.getCollections()
+        //            .subscribeOn(Schedulers.io())
+        //            .flatMapCompletable { it ->
+        //                Log.d("collect_size", it.collections[15].slug.toString())
+        //                collectionDao.insertCollections(it.collections)
+        //            }
+        //            .andThen(
+        //                collectionDao.getCollections()
+        //            )
+        //            .share()
+        //            .doOnNext { it ->
+        //                Log.d("collect_size", it.size.toString())
+        //                collectionsModel.postValue(it)
+        //            }
+        //            .doOnError { throwable ->
+        //                println("getCollections error::" + (throwable as HttpException).message)
+        //            }
+        //            .subscribe()
 
 
     }

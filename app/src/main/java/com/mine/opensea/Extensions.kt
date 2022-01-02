@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import android.graphics.drawable.BitmapDrawable
 
 import android.graphics.Bitmap
+import android.view.View
 import androidx.palette.graphics.Palette
 
 
@@ -27,4 +28,11 @@ fun ImageView.getDominantColor(): Int {
         vibrant = palette?.getVibrantColor(0x000000)!!
     }
     return vibrant
+}
+
+/**
+ * creating [Bitmap] from a layout in order to extract color values then
+ */
+fun View.toBitmap(): Bitmap {
+    return Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
 }

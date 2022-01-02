@@ -1,74 +1,100 @@
 package com.mine.opensea.activities
 
-import android.graphics.Color
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.mine.opensea.adapters.CollectionsListRecyclerAdapter
 import com.mine.opensea.databinding.ActivityMainBinding
 import com.mine.opensea.viewModels.CollectionListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderScriptBlur
 
-import android.graphics.drawable.Drawable
-import android.os.Build
-
-import android.view.ViewGroup
-
-import android.view.View
 import android.view.ViewOutlineProvider
-import androidx.compose.material.MaterialTheme.colors
-import androidx.core.content.ContextCompat
+import androidx.core.view.drawToBitmap
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.mine.opensea.R
+import com.mine.opensea.fragments.AssetsFragment
+import com.mine.opensea.fragments.BundlesFragment
+import com.mine.opensea.fragments.CollectionsFragment
+import com.mine.opensea.fragments.MyAssetsFragment
 
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private val binding: ActivityMainBinding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    private val bundlesFragment = BundlesFragment()
+    private val collectionsFragment = CollectionsFragment()
+    private val assetsFragment = AssetsFragment()
+    private val myAssetsFragment = MyAssetsFragment()
+
     private val collectionListViewModel: CollectionListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val mAdapter = CollectionsListRecyclerAdapter()
-
-        binding.collectionRecyclerView.apply {
-            adapter = mAdapter
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            setHasFixedSize(true)
-        }
-
-        collectionListViewModel.collectionsModel.observe(
-            this,
-            Observer {
-                mAdapter.submitList(it)
-            })
-
+        addFragments(savedInstanceState)
         blur()
+        binding.mainBottomNavigation.setOnItemSelectedListener { item ->
 
+            when (item.itemId) {
+                R.id.tab_bundles -> {
+                    showFragment(bundlesFragment)
+                    true
+                }
+                R.id.tab_collections -> {
+                    showFragment(collectionsFragment)
+                    true
+                }
+                R.id.tab_assets -> {
+                    showFragment(assetsFragment)
+                    true
+                }
+                R.id.tab_my_assets -> {
+                    showFragment(myAssetsFragment)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
-    fun blur() {
+    private fun showFragment(fragment: Fragment) {
+        supportFragmentManager.commit {
+            setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out)
+            if (fragment !is BundlesFragment) hide(bundlesFragment)
+            if (fragment !is AssetsFragment) hide(assetsFragment)
+            if (fragment !is CollectionsFragment) hide(collectionsFragment)
+            if (fragment !is MyAssetsFragment) hide(myAssetsFragment)
+            show(fragment)
+        }
+    }
+
+    private fun addFragments(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                add(R.id.fragment_holder, bundlesFragment, BundlesFragment.TAG)
+                add(R.id.fragment_holder, collectionsFragment, CollectionsFragment.TAG)
+                add(R.id.fragment_holder, assetsFragment, AssetsFragment.TAG)
+                add(R.id.fragment_holder, myAssetsFragment, MyAssetsFragment.TAG)
+            }
+            showFragment(bundlesFragment)
+        }
+    }
+
+    private fun blur() {
         val radius = 25f
-
         val decorView = window.decorView
-        //ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
-        //ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
-        //Set drawable to draw in the beginning of each blurred frame (Optional).
-        //Can be used in case your layout has a lot of transparent space and your content
-        //gets kinda lost after after blur is applied.
-        //Set drawable to draw in the beginning of each blurred frame (Optional).
-        //Can be used in case your layout has a lot of transparent space and your content
-        //gets kinda lost after after blur is applied.
         val windowBackground = decorView.background
-
-        binding.blurView.setupWith(binding.rootView)
+        //        binding.image.setImageBitmap(binding.rootView.drawToBitmap( config = Bitmap.Config.ARGB_8888))
+        binding.blurView.setupWith(binding.image)
             .setFrameClearDrawable(windowBackground)
             .setBlurAlgorithm(RenderScriptBlur(this))
             .setBlurRadius(radius)
