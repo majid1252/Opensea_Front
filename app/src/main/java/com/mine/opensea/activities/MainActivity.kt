@@ -2,19 +2,13 @@ package com.mine.opensea.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.viewModels
-import androidx.compose.foundation.layout.*
 import com.mine.opensea.databinding.ActivityMainBinding
-import com.mine.opensea.viewModels.CollectionListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderScriptBlur
 
 import android.view.ViewOutlineProvider
-import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import com.mine.opensea.*
 import com.mine.opensea.R
 import com.mine.opensea.fragments.AssetsFragment
 import com.mine.opensea.fragments.BundlesFragment
@@ -33,8 +27,6 @@ class MainActivity : AppCompatActivity() {
     private val collectionsFragment = CollectionsFragment()
     private val assetsFragment = AssetsFragment()
     private val myAssetsFragment = MyAssetsFragment()
-
-    private val collectionListViewModel: CollectionListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +51,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.tab_my_assets -> {
                     showFragment(myAssetsFragment)
-                    binding.image.animateColor(toColor = R.color.carbon_red_400, duration = 1000)
                     true
                 }
                 else -> false
