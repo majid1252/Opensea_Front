@@ -19,25 +19,47 @@ import java.util.*
 import android.animation.ValueAnimator
 import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
+import android.media.Image
 
 import androidx.core.content.ContextCompat
+import com.mine.opensea.ExtFunctions.getRandomDrawable
+import kotlin.random.Random
 
 /**
- * simply adding necessary android schedulers for [Observable]
+ * Find extension static method here
+ */
+object ExtFunctions {
+    fun getRandomDrawable(): Int {
+        val res = listOf(
+            R.drawable.cool_sky,
+            R.drawable.crystal_clear,
+            R.drawable.kye_meh,
+            R.drawable.mega_tron,
+            R.drawable.sublime_light,
+            R.drawable.sulphur,
+            R.drawable.summer,
+        )
+        return res[Random.nextInt(0, res.size - 1)]
+    }
+}
+
+/**
+ * Simply add necessary android schedulers for [Observable]
  */
 fun Observable<Any>.applyAndroidSchedulers(): Observable<Any> {
     return subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 }
 
 /**
- * getting dominant color accent from [ImageView]
+ * Get dominant color from [ImageView]
  */
 fun ImageView.getDominantColor(): Int {
     return (drawable as BitmapDrawable).bitmap.getDominantColor()
 }
 
 /**
- * get [Bitmap] dominant color
+ * Get [Bitmap] dominant color
  */
 fun Bitmap.getDominantColorOfSwatch(): Int {
     val swatchesTemp = Palette.from(this).generate().swatches
@@ -115,4 +137,38 @@ fun View.animateColor(fromColor: Int = solidColor, toColor: Int, duration: Long)
     colorAnim.setEvaluator(ArgbEvaluator())
     colorAnim.repeatCount = 0
     colorAnim.start()
+}
+
+/**
+ * Set random background from predefined images for [ImageView] source
+ */
+fun ImageView.setRandomBackground() {
+    setImageDrawable(ContextCompat.getDrawable(OpenseaApplication.context, getRandomDrawable()))
+}
+
+
+/**
+ * Get absolute X position of [View] on screeen
+ */
+fun View.absX(): Int {
+    val location = IntArray(2)
+    this.getLocationOnScreen(location)
+    return location[0]
+}
+
+
+fun View.centerX(): Int {
+    val myViewRect = Rect()
+    getGlobalVisibleRect(myViewRect)
+    return myViewRect.centerX()
+}
+
+
+/**
+ * Get absolute X position of [View] on screeen
+ */
+fun View.absY(): Int {
+    val location = IntArray(2)
+    this.getLocationOnScreen(location)
+    return location[1]
 }

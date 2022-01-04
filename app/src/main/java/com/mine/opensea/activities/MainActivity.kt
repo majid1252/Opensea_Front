@@ -1,15 +1,21 @@
 package com.mine.opensea.activities
 
+import android.animation.ObjectAnimator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import com.mine.opensea.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderScriptBlur
 
 import android.view.ViewOutlineProvider
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.mine.opensea.R
+import com.mine.opensea.absX
+import com.mine.opensea.centerX
 import com.mine.opensea.fragments.AssetsFragment
 import com.mine.opensea.fragments.BundlesFragment
 import com.mine.opensea.fragments.CollectionsFragment
@@ -31,11 +37,27 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
+        binding.mainBottomNavigation.itemRippleColor =
+            ContextCompat.getColorStateList(this, android.R.color.transparent)
         addFragments(savedInstanceState)
         blur()
         binding.mainBottomNavigation.setOnItemSelectedListener { item ->
-
+            ObjectAnimator.ofFloat(
+                binding.itemMenuBackBlur,
+                "translationX",
+                (findViewById<View>(item.itemId).centerX().toFloat())
+            ).apply {
+                duration = 200
+                start()
+            }
+            ObjectAnimator.ofFloat(
+                binding.image,
+                "translationX",
+                (findViewById<View>(item.itemId).centerX().toFloat())
+            ).apply {
+                duration = 200
+                start()
+            }
             when (item.itemId) {
                 R.id.tab_bundles -> {
                     showFragment(bundlesFragment)
@@ -86,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         val radius = 25f
         val decorView = window.decorView
         val windowBackground = decorView.background
-        binding.blurView.setupWith(binding.rl)
+        binding.blurView.setupWith(binding.rootView)
             .setFrameClearDrawable(windowBackground)
             .setBlurAlgorithm(RenderScriptBlur(this))
             .setBlurRadius(radius)

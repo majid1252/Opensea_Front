@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="3.0" />
+        <entry key="app/src/main/res/drawable/bottom_bar_indicator_shape.xml" value="0.21614583333333334" />
+        <entry key="app/src/main/res/drawable/bottom_bar_ripple_state_color.xml" value="0.36923076923076925" />
         <entry key="app/src/main/res/drawable/round_collection_blur_item.xml" value="0.36923076923076925" />
         <entry key="app/src/main/res/drawable/rounded_blur_app_bar_out_liner.xml" value="0.2564814814814815" />
         <entry key="app/src/main/res/drawable/rounded_blur_app_bar_outliner.xml" value="0.27314814814814814" />
