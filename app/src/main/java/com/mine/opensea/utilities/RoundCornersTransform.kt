@@ -1,3 +1,5 @@
+package com.mine.opensea.utilities
+
 import android.graphics.*
 import com.squareup.picasso.Transformation
 

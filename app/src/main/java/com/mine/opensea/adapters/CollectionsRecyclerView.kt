@@ -21,6 +21,7 @@ class CollectionsRecyclerView() :
             CollectionItemDiffCallback()
         ) {
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context)
@@ -82,6 +83,7 @@ class CollectionsRecyclerView() :
 
         }
     }
+
 
     override fun submitList(list: List<Collection>?) {
 

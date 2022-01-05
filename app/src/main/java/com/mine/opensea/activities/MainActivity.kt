@@ -5,24 +5,34 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import com.mine.opensea.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderScriptBlur
 
 import android.view.ViewOutlineProvider
+import androidx.compose.animation.fadeOut
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mine.opensea.*
 import com.mine.opensea.fragments.AssetsFragment
 import com.mine.opensea.fragments.BundlesFragment
 import com.mine.opensea.fragments.CollectionsFragment
 import com.mine.opensea.fragments.MyAssetsFragment
+import com.mine.opensea.utilities.OpenRecyclerView
 
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
 
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -33,11 +43,25 @@ class MainActivity : AppCompatActivity() {
     private val assetsFragment = AssetsFragment()
     private val myAssetsFragment = MyAssetsFragment()
 
+    companion object {
+        private const val DEBUG_TAG = "Gestures"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         binding.mainBottomNavigation.itemRippleColor =
             ContextCompat.getColorStateList(this, android.R.color.transparent)
+        OpenRecyclerView.addGlobalFlingListener(object : RecyclerView.OnFlingListener() {
+            override fun onFling(velocityX: Int, velocityY: Int): Boolean {
+                if (velocityY > 0) {
+                    binding.rl.hide()
+                } else
+                    binding.rl.show()
+                return false
+            }
+
+        })
         setUp(savedInstanceState)
     }
 
@@ -132,6 +156,24 @@ class MainActivity : AppCompatActivity() {
         binding.blurView.outlineProvider = ViewOutlineProvider.BACKGROUND;
         binding.blurView.clipToOutline = true;
 
+    }
+
+    private fun ConstraintLayout.hide() {
+        if (alpha == 1f)
+            animate().apply {
+                duration = 200
+                translationYBy(200f)
+                alpha(0f)
+            }.start()
+    }
+
+    private fun ConstraintLayout.show() {
+        if (alpha == 0f)
+            animate().apply {
+                duration = 200
+                translationYBy(-200f)
+                alpha(1f)
+            }.start()
     }
 
 }

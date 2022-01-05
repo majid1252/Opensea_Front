@@ -1,6 +1,7 @@
 package com.mine.opensea.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.mine.opensea.R
+import com.mine.opensea.activities.MainActivity
 import com.mine.opensea.adapters.CollectionsRecyclerView
 import com.mine.opensea.databinding.FragmentCollectionsBinding
 import com.mine.opensea.viewModels.CollectionsFragmentViewModel
