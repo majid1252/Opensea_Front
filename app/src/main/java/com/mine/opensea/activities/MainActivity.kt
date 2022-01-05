@@ -1,9 +1,10 @@
 package com.mine.opensea.activities
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.util.AttributeSet
 import android.view.View
 import com.mine.opensea.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -13,9 +14,7 @@ import android.view.ViewOutlineProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import com.mine.opensea.R
-import com.mine.opensea.absX
-import com.mine.opensea.centerX
+import com.mine.opensea.*
 import com.mine.opensea.fragments.AssetsFragment
 import com.mine.opensea.fragments.BundlesFragment
 import com.mine.opensea.fragments.CollectionsFragment
@@ -39,25 +38,30 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.mainBottomNavigation.itemRippleColor =
             ContextCompat.getColorStateList(this, android.R.color.transparent)
+        setUp(savedInstanceState)
+    }
+
+    private fun setUp(savedInstanceState: Bundle?) {
+        setUpBottomNavigation()
+        setUpBlur()
         addFragments(savedInstanceState)
-        blur()
+    }
+
+    private fun setUpBottomNavigation() {
+
+        // waiting for view to get initialized in order to execute translationX...
+        // animations successfully for the first time
+        findViewById<View>(R.id.tab_bundles).onInitialized {
+            binding.mainBottomNavigation.selectedItemId = R.id.tab_bundles
+        }
+
         binding.mainBottomNavigation.setOnItemSelectedListener { item ->
-            ObjectAnimator.ofFloat(
-                binding.itemMenuBackBlur,
-                "translationX",
-                (findViewById<View>(item.itemId).centerX().toFloat())
-            ).apply {
-                duration = 200
-                start()
-            }
-            ObjectAnimator.ofFloat(
-                binding.image,
-                "translationX",
-                (findViewById<View>(item.itemId).centerX().toFloat())
-            ).apply {
-                duration = 200
-                start()
-            }
+            val viewItem = findViewById<View>(item.itemId)
+            val animatePosition = viewItem.absX().toFloat() + viewItem.width / 10
+
+            animateToPositionX(binding.itemMenuBackBlur, animatePosition)
+            animateToPositionX(binding.image, animatePosition)
+
             when (item.itemId) {
                 R.id.tab_bundles -> {
                     showFragment(bundlesFragment)
@@ -77,6 +81,17 @@ class MainActivity : AppCompatActivity() {
                 }
                 else -> false
             }
+        }
+    }
+
+    private fun animateToPositionX(toAnimate: View, animatePosition: Float) {
+        ObjectAnimator.ofFloat(
+            toAnimate,
+            "translationX",
+            animatePosition
+        ).apply {
+            duration = 200
+            start()
         }
     }
 
@@ -104,7 +119,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun blur() {
+    private fun setUpBlur() {
         val radius = 25f
         val decorView = window.decorView
         val windowBackground = decorView.background

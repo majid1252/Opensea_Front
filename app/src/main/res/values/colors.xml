@@ -8,8 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="alpha">#RRGGBBAA</color>
-    <color name="accent_color">#FFFFFFFF</color>
-    <color name="colorOverlay">#78ffffff</color>
-
-    <color name="white_overlay">#78ffffff</color>
+    <color name="accent_color">#4C3F91</color>
+    <color name="level_two_accent_color">#FF5677</color>
+    <color name="white_overlay">#88ffffff</color>
+    <color name="heading_one_color">#4C3F91</color>
+    <color name="heading_two_color">#6E3CBC</color>
+    <color name="heading_three_color">#B958A5</color>
 </resources>

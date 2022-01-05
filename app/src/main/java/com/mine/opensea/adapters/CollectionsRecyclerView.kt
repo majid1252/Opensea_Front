@@ -37,6 +37,8 @@ class CollectionsRecyclerView() :
         public fun bindTo(collection: Collection) {
             blur(binding = binding)
             binding.nameTextView.text = collection.name
+            binding.nameTextView.isSelected = true
+            binding.descriptionTextView.isSelected = true
             binding.descriptionTextView.text = collection.description
             binding.bannerImageView.clipToOutline = true
             binding.rootView.clipToOutline = true

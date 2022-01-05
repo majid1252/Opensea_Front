@@ -21,6 +21,7 @@ import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.media.Image
+import android.view.ViewTreeObserver
 
 import androidx.core.content.ContextCompat
 import com.mine.opensea.ExtFunctions.getRandomDrawable
@@ -148,7 +149,7 @@ fun ImageView.setRandomBackground() {
 
 
 /**
- * Get absolute X position of [View] on screeen
+ * Get absolute X position of [View] on screen
  */
 fun View.absX(): Int {
     val location = IntArray(2)
@@ -165,10 +166,24 @@ fun View.centerX(): Int {
 
 
 /**
- * Get absolute X position of [View] on screeen
+ * Get absolute X position of [View] on screen
  */
 fun View.absY(): Int {
     val location = IntArray(2)
     this.getLocationOnScreen(location)
     return location[1]
+}
+
+/**
+ * Callback on [View] successfully initialized so that it can be measurable
+ */
+fun View.onInitialized(onInit: () -> Unit) {
+    viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            if (isShown) {
+                viewTreeObserver.removeOnGlobalLayoutListener(this)
+                onInit()
+            }
+        }
+    })
 }

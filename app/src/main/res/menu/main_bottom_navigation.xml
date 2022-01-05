@@ -3,7 +3,6 @@
     <item
         android:id="@+id/tab_bundles"
         android:enabled="true"
-        android:icon="@drawable/carbon_iconplaceholder"
         android:title="" />
     <item
         android:id="@+id/tab_collections"
