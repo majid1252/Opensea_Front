@@ -50,8 +50,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
         binding.mainBottomNavigation.itemRippleColor =
             ContextCompat.getColorStateList(this, android.R.color.transparent)
+
         OpenRecyclerView.addGlobalFlingListener(object : RecyclerView.OnFlingListener() {
             override fun onFling(velocityX: Int, velocityY: Int): Boolean {
                 if (velocityY > 0) {
@@ -62,6 +64,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+
         setUp(savedInstanceState)
     }
 
@@ -83,8 +86,8 @@ class MainActivity : AppCompatActivity() {
             val viewItem = findViewById<View>(item.itemId)
             val animatePosition = viewItem.absX().toFloat() + viewItem.width / 10
 
-            animateToPositionX(binding.itemMenuBackBlur, animatePosition)
-            animateToPositionX(binding.image, animatePosition)
+            binding.itemMenuBackBlur.animateToPositionX(animatePosition)
+            binding.image.animateToPositionX(animatePosition)
 
             when (item.itemId) {
                 R.id.tab_bundles -> {
@@ -108,9 +111,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun animateToPositionX(toAnimate: View, animatePosition: Float) {
+    private fun View.animateToPositionX(animatePosition: Float) {
         ObjectAnimator.ofFloat(
-            toAnimate,
+            this,
             "translationX",
             animatePosition
         ).apply {

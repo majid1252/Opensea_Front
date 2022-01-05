@@ -9,6 +9,7 @@ import com.mine.opensea.networking.api.OpenseaRetroService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.HttpException
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,21 +22,26 @@ class CollectionsFragmentViewModel @Inject constructor(
     init {
         openseaRetroService.getCollections()
             .subscribeOn(Schedulers.io())
+            .doOnError {
+                Log.d("observe::", "retrofit error")
+            }
+            .retryWhen { it.delay(5, TimeUnit.SECONDS) }
             .flatMapCompletable { it ->
-                Log.d("collect_size", it.collections[15].slug.toString())
+                Log.d("observe::", "flatMap completable")
                 collectionDao.insertCollections(it.collections)
             }
             .andThen(
                 collectionDao.getCollections()
             )
+            .doOnNext {
+                Log.d("observe::", "get from database")
+            }
             .share()
-            .doOnNext { it ->
-                Log.d("collect_size", it.size.toString())
-                collectionsModel.postValue(it)
-            }
-            .doOnError { throwable ->
-                println("getCollections error::" + (throwable as HttpException).message)
-            }
-            .subscribe()
+            .subscribe(
+                { collectionsModel.postValue(it) },
+                { e ->
+                    Log.d("observe::", "subscribe error")
+                }
+            )
     }
 }
