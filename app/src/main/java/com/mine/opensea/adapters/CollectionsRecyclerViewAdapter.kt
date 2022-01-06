@@ -83,8 +83,6 @@ class CollectionsRecyclerViewAdapter(val fragment: Fragment) :
                 putString("IMAGE_URI", collection.bannerImageUrl)
             }
 
-            //            (fragment.exitTransition as TransitionSet).excludeTarget(binding.bannerImageView, true)
-
             collectionDetailsFragment.arguments = bundle
             binding.rootView.setOnClickListener {
                 fragment.parentFragmentManager.commit {

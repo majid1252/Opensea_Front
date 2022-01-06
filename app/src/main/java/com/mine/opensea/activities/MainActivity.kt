@@ -19,6 +19,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentOnAttachListener
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -31,7 +33,7 @@ import com.mine.opensea.utilities.OpenRecyclerView
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FragmentOnAttachListener {
 
 
     private val binding: ActivityMainBinding by lazy {
@@ -75,7 +77,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpBottomNavigation() {
-
+        // add these two listeners to properly hide and show bottom navigation bar
+        supportFragmentManager.addFragmentOnAttachListener(this)
         // waiting for view to get initialized in order to execute translationX...
         // animations successfully for the first time
         findViewById<View>(R.id.tab_bundles).onInitialized {
@@ -177,6 +180,18 @@ class MainActivity : AppCompatActivity() {
                 translationYBy(-200f)
                 alpha(1f)
             }.start()
+    }
+
+    override fun onAttachFragment(fragmentManager: FragmentManager, fragment: Fragment) {
+        if (fragment.tag.toString() !in listOf(
+                CollectionsFragment.TAG,
+                BundlesFragment.TAG,
+                MyAssetsFragment.TAG,
+                AssetsFragment.TAG
+            )
+        )
+            binding.rl.hide()
+        Log.d("FragmentListener", "fragment ${fragment.tag} attached")
     }
 
 }
