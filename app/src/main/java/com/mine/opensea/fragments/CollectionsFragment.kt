@@ -1,18 +1,18 @@
 package com.mine.opensea.fragments
 
 import android.os.Bundle
-import android.util.Log
+import androidx.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.SharedElementCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mine.opensea.R
-import com.mine.opensea.activities.MainActivity
-import com.mine.opensea.adapters.CollectionsRecyclerView
+import com.mine.opensea.adapters.CollectionsRecyclerViewAdapter
 import com.mine.opensea.databinding.FragmentCollectionsBinding
 import com.mine.opensea.viewModels.CollectionsFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,10 +29,15 @@ class CollectionsFragment : Fragment() {
         const val TAG = "fragment_collection"
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View {
+        //        exitTransition = TransitionInflater.from(requireContext())
+        //            .inflateTransition(R.transition.collection_shared_exit_transition)
 
-        val mAdapter = CollectionsRecyclerView()
+        val mAdapter = CollectionsRecyclerViewAdapter(this)
         binding.recyclerView.apply {
             adapter = mAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -44,13 +49,6 @@ class CollectionsFragment : Fragment() {
             Observer {
                 mAdapter.submitList(it)
             })
-    }
-
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View {
         return binding.root
     }
 

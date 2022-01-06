@@ -1,23 +1,30 @@
 package com.mine.opensea.adapters
 
+import android.os.Bundle
+import androidx.transition.TransitionSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mine.opensea.*
 import com.mine.opensea.database.models.Collection
 import com.mine.opensea.databinding.CollectionRecyclerViewHolderBinding
+import com.mine.opensea.fragments.CollectionDetailsFragment
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import eightbitlab.com.blurview.RenderScriptBlur
 
-class CollectionsRecyclerView() :
-        ListAdapter<Collection, CollectionsRecyclerView.ViewHolder>(
+class CollectionsRecyclerViewAdapter(val fragment: Fragment) :
+        ListAdapter<Collection, CollectionsRecyclerViewAdapter.ViewHolder>(
             CollectionItemDiffCallback()
         ) {
 
@@ -25,17 +32,23 @@ class CollectionsRecyclerView() :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.collection_recycler_view_holder, parent, false)
+                .inflate(R.layout.collection_recycler_view_holder, parent, false),
+            fragment
         )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindTo(getItem(position))
+        holder.bindTo(getItem(position), holder)
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View, private val fragment: Fragment) :
+            RecyclerView.ViewHolder(itemView) {
         private val binding = CollectionRecyclerViewHolderBinding.bind(itemView)
-        public fun bindTo(collection: Collection) {
+        private val collectionDetailsFragment: CollectionDetailsFragment by lazy {
+            CollectionDetailsFragment()
+        }
+
+        public fun bindTo(collection: Collection, holder: ViewHolder) {
             blur(binding = binding)
             binding.nameTextView.text = collection.name
             binding.nameTextView.isSelected = true
@@ -52,7 +65,7 @@ class CollectionsRecyclerView() :
                 .load(collection.bannerImageUrl)
                 .placeholder(ExtFunctions.getRandomDrawable())
                 .error(ExtFunctions.getRandomDrawable())
-                .into(binding.bannerImageView, object : com.squareup.picasso.Callback {
+                .into(binding.bannerImageView, object : Callback {
                     override fun onSuccess() {
                         binding.rootView.setElevationShadowColor(binding.bannerImageView.getDominantColor())
                         binding.rootView.outlineAmbientShadowColor =
@@ -60,9 +73,30 @@ class CollectionsRecyclerView() :
                     }
 
                     override fun onError(e: java.lang.Exception?) {
-                        Log.d("setImage: ", "failed")
                     }
                 })
+
+            binding.bannerImageView.transitionName =
+                collection.slug.toString().replace("-", "")
+            val bundle = Bundle().apply {
+                putString("TRANS_NAME", binding.bannerImageView.transitionName)
+                putString("IMAGE_URI", collection.bannerImageUrl)
+            }
+
+            //            (fragment.exitTransition as TransitionSet).excludeTarget(binding.bannerImageView, true)
+
+            collectionDetailsFragment.arguments = bundle
+            binding.rootView.setOnClickListener {
+                fragment.parentFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    addSharedElement(
+                        binding.bannerImageView,
+                        binding.bannerImageView.transitionName
+                    )
+                    replace(R.id.fragment_holder, collectionDetailsFragment)
+                    addToBackStack(null)
+                }
+            }
         }
 
         private fun blur(binding: CollectionRecyclerViewHolderBinding) {
