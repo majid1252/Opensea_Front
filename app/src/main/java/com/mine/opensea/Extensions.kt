@@ -17,14 +17,17 @@ import android.graphics.Bitmap
 import androidx.palette.graphics.Palette.Swatch
 import java.util.*
 import android.animation.ValueAnimator
-import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
-import android.media.Image
+import android.content.Context
+import android.renderscript.Allocation
+import android.renderscript.Element
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicBlur
 import android.view.ViewTreeObserver
 
 import androidx.core.content.ContextCompat
 import com.mine.opensea.ExtFunctions.getRandomDrawable
+import com.mine.opensea.OpenseaApplication.Companion.context
 import kotlin.random.Random
 
 /**
@@ -70,28 +73,76 @@ fun Bitmap.getDominantColorOfSwatch(): Int {
     return if (swatches.isNotEmpty()) swatches[0].rgb else 100000
 }
 
-fun Bitmap.getDominantColor(): Int {
+fun Bitmap.getPaletteOf(
+        left: Int = 0,
+        top: Int = 0,
+        right: Int = 0,
+        bottom: Int = 0
+): Palette {
     val builder = Palette.Builder(this)
-        .setRegion(0, 0, this.width, this.height)
-    val defaultValue = 0xFFFFFF
-    val p = builder.generate()
-    return p.getDominantColor(defaultValue)
+        .setRegion(left, top, right, bottom)
+    return builder.generate()
+}
+
+// extension function to blur a bitmap
+fun Bitmap.blur(context: Context, radius: Float = 10F): Bitmap? {
+    val bitmap = copy(config, true)
+
+    RenderScript.create(context).apply {
+        val input = Allocation.createFromBitmap(this, this@blur)
+        val output = Allocation.createFromBitmap(this, this@blur)
+
+        ScriptIntrinsicBlur.create(this, Element.U8_4(this)).apply {
+            setInput(input)
+            // Set the radius of the Blur. Supported range 0 < radius <= 25
+            setRadius(radius)
+            forEach(output)
+
+            output.copyTo(bitmap)
+            destroy()
+        }
+    }
+    return bitmap
+}
+
+fun Bitmap.blur(iterationsCount: Int): Bitmap {
+    val inputBitmap = Bitmap.createScaledBitmap(
+        this,
+        this.width,
+        this.height,
+        false
+    )
+    val outputBitmap = Bitmap.createBitmap(inputBitmap)
+
+    val rs = RenderScript.create(context)
+
+    for (i in 0..iterationsCount) {
+        val input = Allocation.createFromBitmap(
+            rs,
+            outputBitmap
+        ) //use this constructor for best performance, because it uses USAGE_SHARED mode which reuses memory
+        val output = Allocation.createTyped(rs, input.type)
+        val script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs))
+        script.setRadius(25f)
+        script.setInput(input)
+        script.forEach(output)
+        output.copyTo(outputBitmap)
+    }
+    return outputBitmap
+}
+
+fun Bitmap.getDominantColor(): Int {
+    return getPaletteOf(0, 0, this.width, this.height).getDominantColor(0xFFFFFF)
 }
 
 fun Bitmap.getUpperSideDominantColor(): Int {
-    val builder = Palette.Builder(this)
-        .setRegion(0, 0, this.width, this.height / 2)
-    val defaultValue = 0xFFFFFF
-    val p = builder.generate()
-    return p.getDominantColor(defaultValue)
+    return getPaletteOf(0, 0, this.width, this.height / 2).getDominantColor(0xFFFFFF)
 }
 
 fun Bitmap.getLowerSideDominantColor(): Int {
-    val defaultValue = 0xFFFFFF
-    val builder = Palette.Builder(this)
-        .setRegion(0, this.height / 2, this.width, this.height)
-    return builder.generate().getDominantColor(defaultValue)
+    return getPaletteOf(0, 0, this.width / 2, this.height).getDominantColor(0xFFFFFF)
 }
+
 
 fun Bitmap.getDominantGradient(): Bitmap? {
     var topColor = 0

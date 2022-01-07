@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_view"
     android:layout_width="match_parent"
-    android:background="@color/carbon_red_800"
     android:layout_height="match_parent">
+
+    <com.mine.opensea.utilities.DynamicColorBackground
+        android:id="@+id/dynamic_color_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/blurView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </eightbitlab.com.blurview.BlurView>
 
     <carbon.widget.ImageView
         app:carbon_cornerRadius="10dp"
