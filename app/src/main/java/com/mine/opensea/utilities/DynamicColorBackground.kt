@@ -39,13 +39,10 @@ class DynamicColorBackground(context: Context?, attrs: AttributeSet?) :
     private fun addImageBackgrounds() {
         removeAllViews()
         extractColors()
-        for (i in 0..diversifyBack) {
-            addView(generateImageBack(i))
-        }
+        generateImageBack()
     }
 
-    @DelicateCoroutinesApi
-    private fun generateImageBack(seed: Int): ImageView {
+    private fun generateImageBack() {
 
         var bitmap = Bitmap.createBitmap(700, 1000, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
@@ -61,30 +58,13 @@ class DynamicColorBackground(context: Context?, attrs: AttributeSet?) :
         val centerX = (width / 2).toFloat()
         val centerY = (height / 2).toFloat()
         val radius = 300F
-
-        // TODO() calculating blur should be off loaded
-        GlobalScope.launch(Dispatchers.IO) {
-            bitmap = bitmap.blur(10)
-        }
+        alpha = 0.5f
 
         canvas.drawCircle(centerX, centerY, radius, paint)
 
-        alpha = 0.5f
-        return imageV
-    }
-
-    suspend fun calculateBlur(bitmap: Bitmap) {
-        coroutineScope {
-            val remoteImageDeferred = async(Dispatchers.IO) {
-
-            }
-            val imageBitmap = remoteImageDeferred.await()
-            launch(Dispatchers.Default) {
-                val filterBitmap = bitmap.blur(10)
-                withContext(Dispatchers.Main) {
-                    background = BitmapDrawable(resources, filterBitmap)
-                }
-            }
+        CoroutineScope(Dispatchers.Main).launch {
+            bitmap = bitmap.blur(100)
+            background = BitmapDrawable(resources, bitmap)
         }
     }
 

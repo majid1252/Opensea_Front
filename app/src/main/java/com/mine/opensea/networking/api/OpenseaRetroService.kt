@@ -13,7 +13,12 @@ import retrofit2.http.Query
 
 import com.mine.opensea.database.models.*
 import com.mine.opensea.networking.UserJsonConvertor
+import java.util.concurrent.TimeUnit
+import okhttp3.ConnectionSpec
 
+import java.util.Arrays
+
+import android.os.Build
 
 interface OpenseaRetroService {
 
@@ -101,13 +106,16 @@ interface OpenseaRetroService {
 
         fun create(): OpenseaRetroService {
 
-            val client = OkHttpClient.Builder().build()
+            val client = OkHttpClient.Builder()
+            client.connectTimeout(10, TimeUnit.SECONDS);
+            client.readTimeout(10, TimeUnit.SECONDS);
+            client.writeTimeout(10, TimeUnit.SECONDS);
 
             val gson = GsonBuilder()
                 .registerTypeAdapter(User::class.java, UserJsonConvertor())
                 .create()
 
-            return Retrofit.Builder().baseUrl(BASE_URL).client(client)
+            return Retrofit.Builder().baseUrl(BASE_URL).client(client.build())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .addConverterFactory(ScalarsConverterFactory.create()).build()

@@ -28,6 +28,9 @@ import android.view.ViewTreeObserver
 import androidx.core.content.ContextCompat
 import com.mine.opensea.ExtFunctions.getRandomDrawable
 import com.mine.opensea.OpenseaApplication.Companion.context
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.yield
 import kotlin.random.Random
 
 /**
@@ -105,31 +108,33 @@ fun Bitmap.blur(context: Context, radius: Float = 10F): Bitmap? {
     return bitmap
 }
 
-fun Bitmap.blur(iterationsCount: Int): Bitmap {
-    val inputBitmap = Bitmap.createScaledBitmap(
-        this,
-        this.width,
-        this.height,
-        false
-    )
-    val outputBitmap = Bitmap.createBitmap(inputBitmap)
+suspend fun Bitmap.blur(iterationsCount: Int): Bitmap =
+    withContext(Dispatchers.Main) {
+        val inputBitmap = Bitmap.createScaledBitmap(
+            this@blur,
+            this@blur.width,
+            this@blur.height,
+            false
+        )
+        val outputBitmap = Bitmap.createBitmap(inputBitmap)
 
-    val rs = RenderScript.create(context)
+        val rs = RenderScript.create(context)
 
-    for (i in 0..iterationsCount) {
-        val input = Allocation.createFromBitmap(
-            rs,
-            outputBitmap
-        ) //use this constructor for best performance, because it uses USAGE_SHARED mode which reuses memory
-        val output = Allocation.createTyped(rs, input.type)
-        val script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs))
-        script.setRadius(25f)
-        script.setInput(input)
-        script.forEach(output)
-        output.copyTo(outputBitmap)
+        for (i in 0..iterationsCount) {
+            val input = Allocation.createFromBitmap(
+                rs,
+                outputBitmap
+            ) //use this constructor for best performance, because it uses USAGE_SHARED mode which reuses memory
+            val output = Allocation.createTyped(rs, input.type)
+            val script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs))
+            script.setRadius(25f)
+            script.setInput(input)
+            script.forEach(output)
+            output.copyTo(outputBitmap)
+            yield()
+        }
+        outputBitmap
     }
-    return outputBitmap
-}
 
 fun Bitmap.getDominantColor(): Int {
     return getPaletteOf(0, 0, this.width, this.height).getDominantColor(0xFFFFFF)
