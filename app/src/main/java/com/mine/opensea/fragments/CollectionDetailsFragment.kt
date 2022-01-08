@@ -55,7 +55,7 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
             .load(arguments?.getString("IMAGE_URI"))
             .into(binding.collectionBannerImageView, object : Callback {
                 override fun onSuccess() {
-
+                    setUpBlur()
                 }
 
                 override fun onError(e: Exception?) {
@@ -69,7 +69,6 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
             .inflateTransition(R.transition.collection_shared_exit_transition)
         sharedElementEnterTransition = TransitionInflater.from(requireContext())
             .inflateTransition(R.transition.collection_details_shared_element_transition)
-        setUpBlur()
         return binding.root
     }
 
@@ -78,7 +77,7 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
         binding.blurView.setupWith(binding.rootView)
             .setBlurAlgorithm(RenderScriptBlur(requireContext()))
             .setBlurRadius(radius)
-            .setBlurAutoUpdate(true)
+            .setBlurAutoUpdate(false)
             .setHasFixedTransformationMatrix(true)
         binding.blurView.outlineProvider = ViewOutlineProvider.BACKGROUND;
         binding.blurView.clipToOutline = true;
