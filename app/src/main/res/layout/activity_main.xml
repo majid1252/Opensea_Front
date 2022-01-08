@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:clipChildren="false"
     android:clipToPadding="false"
+    android:fitsSystemWindows="false"
     android:layoutDirection="ltr"
     tools:context=".activities.MainActivity">
 
@@ -17,9 +18,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.fragment.app.FragmentContainerView>
 
     <!--    <carbon.widget.LinearLayout-->
     <!--        android:layout_width="wrap_content"-->

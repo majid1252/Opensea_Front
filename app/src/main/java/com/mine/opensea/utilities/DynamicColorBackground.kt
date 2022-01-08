@@ -16,6 +16,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.palette.graphics.Palette
@@ -29,6 +30,8 @@ class DynamicColorBackground(context: Context?, attrs: AttributeSet?) :
         RelativeLayout(context, attrs) {
 
     var diversifyBack = 2
+    var iteratinoCount = 10
+    var _alpha = 0.3F
     var bitmapBackground: Bitmap? = null
     private val palette: Palette by lazy {
         Palette.from(bitmapBackground!!).generate()
@@ -84,8 +87,8 @@ class DynamicColorBackground(context: Context?, attrs: AttributeSet?) :
     }
 
     private fun generateImageBack() {
-
-        var bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        var bitmap =
+            Bitmap.createBitmap(width, if (height == 0) 1 else height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
 
         CoroutineScope(Dispatchers.Main).launch {
@@ -109,10 +112,10 @@ class DynamicColorBackground(context: Context?, attrs: AttributeSet?) :
                 paint.strokeWidth = 100F - i * 20
                 canvas.drawCircle(centerX, centerY, radius, paint)
             }
-            bitmap = bitmap.blur(20)
+            bitmap = bitmap.blur(iteratinoCount)
             background = BitmapDrawable(resources, bitmap)
         }.invokeOnCompletion {
-            ObjectAnimator.ofFloat(this, "alpha", 0f, 0.2f).apply {
+            ObjectAnimator.ofFloat(this, "alpha", 0f, _alpha).apply {
                 duration = 500
                 interpolator = AccelerateDecelerateInterpolator()
             }.start()

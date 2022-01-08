@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root_view"
     android:layout_width="match_parent"
-    android:background="@color/white"
+    android:id="@+id/root_view"
     android:layout_height="match_parent">
 
     <com.mine.opensea.utilities.DynamicColorBackground
@@ -11,22 +10,52 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <eightbitlab.com.blurview.BlurView
-        android:id="@+id/blurView"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </eightbitlab.com.blurview.BlurView>
+        <androidx.constraintlayout.widget.ConstraintLayout
 
-    <carbon.widget.ImageView
-        app:carbon_cornerRadius="10dp"
-        android:id="@+id/collection_banner_image_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="100dp"
-        android:layout_margin="10dp"
-        android:outlineProvider="background"
-        android:adjustViewBounds="true"
-        android:background="@drawable/rounded_blur_app_bar_out_liner"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <eightbitlab.com.blurview.BlurView
+                android:id="@+id/blurView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+            </eightbitlab.com.blurview.BlurView>
+
+            <eightbitlab.com.blurview.BlurView
+                android:id="@+id/blurView2"
+                android:layout_width="0dp"
+                app:layout_constraintTop_toBottomOf="@id/collection_banner_image_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_margin="20dp"
+                android:background="@drawable/rounded_blur_app_bar_out_liner"
+                app:blurOverlayColor="@color/white_overlay"
+                android:layout_height="500dp">
+
+
+            </eightbitlab.com.blurview.BlurView>
+
+            <carbon.widget.ImageView
+                android:id="@+id/collection_banner_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/rounded_blur_app_bar_out_liner"
+                android:minHeight="100dp"
+                android:outlineProvider="background"
+                app:carbon_cornerRadius="10dp"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -37,12 +37,7 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.collectionBannerImageView.onInitialized {
-            binding.dynamicColorBack.apply {
-                bitmapBackground =
-                    binding.collectionBannerImageView.drawToBitmap(Bitmap.Config.ARGB_8888)
-            }.draw()
-        }
+
     }
 
     override fun onCreateView(
@@ -55,7 +50,15 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
             .load(arguments?.getString("IMAGE_URI"))
             .into(binding.collectionBannerImageView, object : Callback {
                 override fun onSuccess() {
-                    setUpBlur()
+                    binding.collectionBannerImageView.onInitialized {
+                        binding.dynamicColorBack.apply {
+                            diversifyBack = 4
+                            iteratinoCount = 20
+                            _alpha = 0.25F
+                            bitmapBackground =
+                                binding.collectionBannerImageView.drawToBitmap(Bitmap.Config.ARGB_8888)
+                        }.draw()
+                    }
                 }
 
                 override fun onError(e: Exception?) {
@@ -69,6 +72,7 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
             .inflateTransition(R.transition.collection_shared_exit_transition)
         sharedElementEnterTransition = TransitionInflater.from(requireContext())
             .inflateTransition(R.transition.collection_details_shared_element_transition)
+        setUpBlur()
         return binding.root
     }
 
@@ -77,10 +81,18 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
         binding.blurView.setupWith(binding.rootView)
             .setBlurAlgorithm(RenderScriptBlur(requireContext()))
             .setBlurRadius(radius)
-            .setBlurAutoUpdate(false)
-            .setHasFixedTransformationMatrix(true)
+            .setBlurAutoUpdate(true)
+            .setHasFixedTransformationMatrix(false)
         binding.blurView.outlineProvider = ViewOutlineProvider.BACKGROUND;
         binding.blurView.clipToOutline = true;
+
+        binding.blurView2.setupWith(binding.rootView)
+            .setBlurAlgorithm(RenderScriptBlur(requireContext()))
+            .setBlurRadius(radius)
+            .setBlurAutoUpdate(true)
+            .setHasFixedTransformationMatrix(false)
+        binding.blurView2.outlineProvider = ViewOutlineProvider.BACKGROUND;
+        binding.blurView2.clipToOutline = true;
 
     }
 
