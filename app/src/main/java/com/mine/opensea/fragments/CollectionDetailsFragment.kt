@@ -1,18 +1,23 @@
 package com.mine.opensea.fragments
 
+import android.animation.ObjectAnimator
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
+import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionInflater
+import com.mine.opensea.OpenseaApplication
 import com.mine.opensea.R
 import com.mine.opensea.adapters.CollectionsRecyclerViewAdapter
 import com.mine.opensea.databinding.FragmentCollectionDetailsBinding
@@ -78,22 +83,45 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
 
     private fun setUpBlur() {
         val radius = 25f
-        binding.blurView.setupWith(binding.rootView)
+        binding.backBlur.setupWith(binding.rootView)
             .setBlurAlgorithm(RenderScriptBlur(requireContext()))
             .setBlurRadius(radius)
             .setBlurAutoUpdate(true)
-            .setHasFixedTransformationMatrix(false)
-        binding.blurView.outlineProvider = ViewOutlineProvider.BACKGROUND;
-        binding.blurView.clipToOutline = true;
+            .setHasFixedTransformationMatrix(true)
 
         binding.blurView2.setupWith(binding.rootView)
             .setBlurAlgorithm(RenderScriptBlur(requireContext()))
             .setBlurRadius(radius)
             .setBlurAutoUpdate(true)
+            .setOverlayColor(
+                ContextCompat.getColor(
+                    OpenseaApplication.context,
+                    R.color.white_overlay
+                )
+            )
             .setHasFixedTransformationMatrix(false)
         binding.blurView2.outlineProvider = ViewOutlineProvider.BACKGROUND;
         binding.blurView2.clipToOutline = true;
 
+        binding.detailsBlurView.setupWith(binding.rootView)
+            .setBlurAlgorithm(RenderScriptBlur(requireContext()))
+            .setBlurRadius(radius)
+            .setBlurAutoUpdate(true)
+            .setOverlayColor(
+                ContextCompat.getColor(
+                    OpenseaApplication.context,
+                    R.color.white_overlay
+                )
+            )
+            .setHasFixedTransformationMatrix(false)
+        binding.detailsBlurView.outlineProvider = ViewOutlineProvider.BACKGROUND;
+        binding.detailsBlurView.clipToOutline = true;
+
+        binding.container.animate().apply {
+            translationYBy(300F)
+            duration = 1000
+            interpolator = AccelerateDecelerateInterpolator()
+        }.start()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

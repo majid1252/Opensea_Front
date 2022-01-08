@@ -47,7 +47,7 @@
                 android:outlineProvider="background">
 
                 <eightbitlab.com.blurview.BlurView
-                    android:id="@+id/blurView"
+                    android:id="@+id/blur_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/round_collection_blur_item"
