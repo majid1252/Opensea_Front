@@ -136,7 +136,6 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
             .setHasFixedTransformationMatrix(false)
         binding.detailsBlurView.outlineProvider = ViewOutlineProvider.BACKGROUND;
         binding.detailsBlurView.clipToOutline = true;
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

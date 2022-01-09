@@ -36,7 +36,7 @@
 
             <eightbitlab.com.blurview.BlurView
                 android:id="@+id/blurView2"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="400dp"
                 android:layout_marginEnd="10dp"
@@ -46,7 +46,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/details_blur_view">
 
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer_layout"
+                    android:layout_width="match_parent"
+                    app:shimmer_base_color="@color/white"
+                    android:layout_height="400dp">
 
+                    <RelativeLayout
+                        android:background="@color/white_overlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </RelativeLayout>
+                </com.facebook.shimmer.ShimmerFrameLayout>
             </eightbitlab.com.blurview.BlurView>
 
             <eightbitlab.com.blurview.BlurView

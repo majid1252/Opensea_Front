@@ -91,7 +91,8 @@ dependencies {
     implementation 'androidx.palette:palette-ktx:1.0.0'
     implementation 'com.mikhaellopez:circularimageview:4.3.0'
     implementation "androidx.dynamicanimation:dynamicanimation:$dynamicanimation_version"
-
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    
     // Room
     implementation "androidx.room:room-rxjava3:$room_version"
     implementation "androidx.room:room-runtime:$room_version"
