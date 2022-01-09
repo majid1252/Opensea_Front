@@ -110,6 +110,8 @@ dependencies {
 
     // Paging Library
     implementation "androidx.room:room-paging:$paging_version"
+    implementation "androidx.paging:paging-runtime-ktx:3.1.0"
+    implementation "androidx.paging:paging-rxjava2-ktx:3.1.0"
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
