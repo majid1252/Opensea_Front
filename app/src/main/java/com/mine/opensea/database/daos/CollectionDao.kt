@@ -1,5 +1,6 @@
 package com.mine.opensea.database.daos
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -12,8 +13,14 @@ import io.reactivex.rxjava3.core.Observable
 interface CollectionDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCollections(collections: List<Collection>): Completable
+    fun insertCollections(collections: List<Collection>)
 
     @Query("SELECT * from collections_table")
-    fun getCollections(): Observable<List<Collection>>
+    fun getCollections(): PagingSource<Int, Collection>
+
+    @Query("SELECT * from collections_table")
+    fun getCollectionsByList(): List<Collection>
+
+    @Query("DELETE FROM collections_table")
+    fun clearAllCollections()
 }

@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +25,7 @@ import com.squareup.picasso.Picasso
 import eightbitlab.com.blurview.RenderScriptBlur
 
 class CollectionsRecyclerViewAdapter(val fragment: Fragment) :
-        ListAdapter<Collection, CollectionsRecyclerViewAdapter.ViewHolder>(
+        PagingDataAdapter<Collection, CollectionsRecyclerViewAdapter.ViewHolder>(
             CollectionItemDiffCallback()
         ) {
 
@@ -38,7 +39,7 @@ class CollectionsRecyclerViewAdapter(val fragment: Fragment) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindTo(getItem(position), holder)
+        holder.bindTo(getItem(position)!!, holder)
     }
 
     class ViewHolder(itemView: View, private val fragment: Fragment) :
@@ -114,12 +115,6 @@ class CollectionsRecyclerViewAdapter(val fragment: Fragment) :
             binding.blurView.clipToOutline = true;
 
         }
-    }
-
-
-    override fun submitList(list: List<Collection>?) {
-
-        super.submitList(list)
     }
 
     class CollectionItemDiffCallback : DiffUtil.ItemCallback<Collection>() {

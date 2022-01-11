@@ -23,17 +23,24 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.mine.opensea.database.daos.CollectionDao
+import com.mine.opensea.database.daos.CollectionRemoteKeysDao
 import com.mine.opensea.database.models.Collection
+import com.mine.opensea.database.models.Collections
 
 /**
  * initializing room database to store and retrieve data
  */
 
-@Database(entities = [Collection::class], version = 2, exportSchema = false)
+@Database(
+    entities = [Collection::class, Collections.CollectionRemoteKeys::class],
+    version = 1,
+    exportSchema = false
+)
 @TypeConverters(RoomTypeConvertors::class)
 abstract class OpenseaDatabase : RoomDatabase() {
 
     abstract fun collectionDao(): CollectionDao
+    abstract fun collectionsRemoteKeys(): CollectionRemoteKeysDao
 
     companion object {
 

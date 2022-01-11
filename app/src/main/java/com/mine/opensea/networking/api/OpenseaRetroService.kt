@@ -19,6 +19,7 @@ import okhttp3.ConnectionSpec
 import java.util.Arrays
 
 import android.os.Build
+import io.reactivex.rxjava3.core.Single
 
 interface OpenseaRetroService {
 
@@ -30,7 +31,7 @@ interface OpenseaRetroService {
             @Query("offset") offset: Int = 0,
             @Query("asset_owner") assetOwner: String? = null,
             @Query("limit") limit: Int = 20
-    ): Observable<Collections>
+    ): Single<Collections>
 
 
     /**

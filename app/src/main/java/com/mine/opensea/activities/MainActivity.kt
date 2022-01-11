@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentOnAttachListener
 import androidx.fragment.app.commit
+import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mine.opensea.*
@@ -31,7 +32,7 @@ import com.mine.opensea.fragments.CollectionsFragment
 import com.mine.opensea.fragments.MyAssetsFragment
 import com.mine.opensea.utilities.OpenRecyclerView
 
-
+@ExperimentalPagingApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), FragmentOnAttachListener {
 

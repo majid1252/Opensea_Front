@@ -8,6 +8,12 @@ import com.google.gson.annotations.SerializedName
 @Entity(tableName = "collections_table")
 data class Collection(
 
+        @PrimaryKey(autoGenerate = true)
+        var id: Long,
+
+        @field:SerializedName("slug")
+        val slug: String,
+
         @field:SerializedName("external_url")
         val externalUrl: String? = null,
 
@@ -74,9 +80,6 @@ data class Collection(
         @field:SerializedName("instagram_username")
         val instagramUsername: String? = null,
 
-        @field:SerializedName("slug")
-        val slug: String? = null,
-
         @field:SerializedName("is_subject_to_whitelist")
         val isSubjectToWhitelist: Boolean? = null,
 
@@ -96,7 +99,6 @@ data class Collection(
         @field:SerializedName("display_data")
         val displayData: DisplayData? = null,
 
-        @PrimaryKey
         @field:SerializedName("name")
         val name: String,
 
