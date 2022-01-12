@@ -1,11 +1,18 @@
 package com.mine.opensea.database.models
 
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.IgnoredOnParcel
+import kotlinx.parcelize.Parceler
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 
 @Entity(tableName = "collections_table")
+@Parcelize
 data class Collection(
 
         @PrimaryKey(autoGenerate = true)
@@ -15,10 +22,10 @@ data class Collection(
         val slug: String,
 
         @field:SerializedName("external_url")
-        val externalUrl: String? = null,
+        val externalUrl: String? = "",
 
         @field:SerializedName("short_description")
-        val shortDescription: String? = null,
+        val shortDescription: String? = "",
 
         @field:SerializedName("featured")
         val featured: Boolean? = null,
@@ -35,10 +42,10 @@ data class Collection(
         val hidden: Boolean? = null,
 
         @field:SerializedName("wiki_url")
-        val wikiUrl: String? = null,
+        val wikiUrl: String? = "",
 
         @field:SerializedName("twitter_username")
-        val twitterUsername: String? = null,
+        val twitterUsername: String? = "",
 
         @field:SerializedName("primary_asset_contracts")
         val primaryAssetContracts: List<PrimaryAssetContract?>? = null,
@@ -47,66 +54,66 @@ data class Collection(
         val defaultToFiat: Boolean? = null,
 
         @field:SerializedName("description")
-        val description: String? = null,
+        val description: String? = "",
 
         @field:SerializedName("opensea_buyer_fee_basis_points")
-        val openseaBuyerFeeBasisPoints: String? = null,
+        val openseaBuyerFeeBasisPoints: String? = "",
 
         @field:SerializedName("discord_url")
-        val discordUrl: String? = null,
+        val discordUrl: String? = "",
 
         @field:SerializedName("large_image_url")
-        val largeImageUrl: String? = null,
+        val largeImageUrl: String? = "",
 
         @field:SerializedName("payout_address")
-        val payoutAddress: String? = null,
+        val payoutAddress: String? = "",
 
         @Embedded
         @field:SerializedName("stats")
         val stats: Stats? = null,
 
         @field:SerializedName("opensea_seller_fee_basis_points")
-        val openseaSellerFeeBasisPoints: String? = null,
+        val openseaSellerFeeBasisPoints: String? = "",
 
         @field:SerializedName("banner_image_url")
-        val bannerImageUrl: String? = null,
+        val bannerImageUrl: String? = "",
 
         @field:SerializedName("safelist_request_status")
-        val safelistRequestStatus: String? = null,
+        val safelistRequestStatus: String? = "",
 
         @field:SerializedName("featured_image_url")
-        val featuredImageUrl: String? = null,
+        val featuredImageUrl: String? = "",
 
         @field:SerializedName("instagram_username")
-        val instagramUsername: String? = null,
+        val instagramUsername: String? = "",
 
         @field:SerializedName("is_subject_to_whitelist")
         val isSubjectToWhitelist: Boolean? = null,
 
         @field:SerializedName("image_url")
-        val imageUrl: String? = null,
+        val imageUrl: String? = "",
 
         @field:SerializedName("dev_seller_fee_basis_points")
-        val devSellerFeeBasisPoints: String? = null,
+        val devSellerFeeBasisPoints: String? = "",
 
         @field:SerializedName("medium_username")
-        val mediumUsername: String? = null,
+        val mediumUsername: String? = "",
 
         @field:SerializedName("telegram_url")
-        val telegramUrl: String? = null,
+        val telegramUrl: String? = "",
 
         @Embedded
         @field:SerializedName("display_data")
         val displayData: DisplayData? = null,
 
         @field:SerializedName("name")
-        val name: String? = null,
+        val name: String? = "",
 
         @field:SerializedName("chat_url")
-        val chatUrl: String? = null,
+        val chatUrl: String? = "",
 
         @field:SerializedName("created_date")
-        val createdDate: String? = null,
+        val createdDate: String? = "",
 
         @field:SerializedName("only_proxied_transfers")
         val onlyProxiedTransfers: Boolean? = null,
@@ -115,5 +122,28 @@ data class Collection(
         val requireEmail: Boolean? = null,
 
         @field:SerializedName("dev_buyer_fee_basis_points")
-        val devBuyerFeeBasisPoints: String? = null
-)
+        val devBuyerFeeBasisPoints: String? = ""
+) : Parcelable {
+    private companion object : Parceler<Collection> {
+        override fun Collection.write(parcel: Parcel, flags: Int) {
+            parcel.writeString(this.bannerImageUrl)
+            parcel.writeString(this.name)
+            parcel.writeString(this.description)
+            parcel.writeString(this.imageUrl)
+            parcel.writeString(this.slug)
+            parcel.writeLong(this.id)
+        }
+
+        override fun create(parcel: Parcel): Collection {
+            return Collection(
+                bannerImageUrl = parcel.readString()!!,
+                name = parcel.readString()!!,
+                description = parcel.readString()!!,
+                imageUrl = parcel.readString()!!,
+                slug = parcel.readString()!!,
+                id = parcel.readLong()
+            )
+        }
+    }
+
+}

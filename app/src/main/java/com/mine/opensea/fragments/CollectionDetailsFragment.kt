@@ -11,24 +11,34 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.transition.TransitionInflater
 import com.mine.opensea.OpenseaApplication
 import com.mine.opensea.R
+import com.mine.opensea.database.models.Collection
 import com.mine.opensea.databinding.FragmentCollectionDetailsBinding
 import com.mine.opensea.onInitialized
+import com.mine.opensea.viewModels.CollectionDetailsViewModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderScriptBlur
+import kotlinx.coroutines.delay
 import java.lang.Exception
 
+@AndroidEntryPoint
 class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details) {
 
+    private val collectionDetailsViewModel: CollectionDetailsViewModel by viewModels()
     private val binding: FragmentCollectionDetailsBinding by lazy {
         FragmentCollectionDetailsBinding.inflate(layoutInflater)
     }
 
     companion object {
-        const val TAG = "fragment_collection_detail"
+        const val TAG = "FRAGMENT_COLLECTIONS_DETAILS"
+        const val TRANSLATION_ARG = "FRAGMENT_COLLECTIONS_DETAILS"
+        const val PARCEL_ARG = "COLLECTION"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,15 +51,16 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        binding.collectionBannerImageView.transitionName = arguments?.getString("TRANS_NAME")
+        binding.collectionBannerImageView.transitionName = arguments?.getString(TRANSLATION_ARG)
+        val collection = arguments?.getParcelable<Collection>(PARCEL_ARG)
         Picasso.get()
-            .load(arguments?.getString("IMAGE_URI"))
+            .load(collection?.bannerImageUrl)
             .into(binding.collectionBannerImageView, object : Callback {
                 override fun onSuccess() {
                     binding.collectionBannerImageView.onInitialized {
                         binding.dynamicColorBack.apply {
                             diversifyBack = 4
-                            iteratinoCount = 20
+                            iterationCount = 25
                             _alpha = 0.25F
                             bitmapBackground =
                                 binding.collectionBannerImageView.drawToBitmap(Bitmap.Config.ARGB_8888)
@@ -62,6 +73,25 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
                 }
 
             })
+
+        Picasso.get()
+            .load(collection?.imageUrl)
+            .into(binding.imageView)
+        binding.descriptionTextView.text = collection?.description
+        binding.nameTextView.text = collection?.name
+        setUpMotion()
+        setUpBlur()
+        fetchData(collection!!.slug)
+        return binding.root
+    }
+
+    private fun fetchData(slug: String) {
+        collectionDetailsViewModel.getCollectionDetails(slug).observe(this, Observer {
+            binding.txt.text = it?.stats?.oneDayVolume.toString()
+        })
+    }
+
+    private fun setUpMotion() {
         enterTransition = TransitionInflater.from(requireContext())
             .inflateTransition(R.transition.collection_shared_exit_transition)
         exitTransition = TransitionInflater.from(requireContext())
@@ -69,14 +99,12 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
         sharedElementEnterTransition = TransitionInflater.from(requireContext())
             .inflateTransition(R.transition.collection_details_shared_element_transition)
         enterAnimations()
-        setUpBlur()
-        return binding.root
     }
 
     private fun enterAnimations() {
         binding.detailsBlurView.animate().apply {
             translationYBy(200F)
-            duration = 1000
+            duration = 500
             interpolator = AccelerateDecelerateInterpolator()
             setUpdateListener {
                 val lp: ConstraintLayout.LayoutParams =
@@ -85,7 +113,7 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
                 binding.blurView2.layoutParams = lp
             }
 
-        }.start()
+        }.setStartDelay(350).start()
     }
 
     private fun setUpBlur() {
@@ -112,8 +140,8 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
 
         binding.detailsBlurView.setupWith(binding.container)
             .setBlurAlgorithm(RenderScriptBlur(requireContext()))
-            .setBlurRadius(5F)
-            .setBlurAutoUpdate(false)
+            .setBlurRadius(radius)
+            .setBlurAutoUpdate(true)
             .setOverlayColor(
                 ContextCompat.getColor(
                     OpenseaApplication.context,

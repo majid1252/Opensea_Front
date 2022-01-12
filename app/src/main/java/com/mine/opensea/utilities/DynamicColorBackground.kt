@@ -7,16 +7,11 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AccelerateInterpolator
-import android.widget.ImageView
 import android.widget.RelativeLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.palette.graphics.Palette
@@ -24,14 +19,14 @@ import com.mine.opensea.R
 import com.mine.opensea.blur
 import com.mine.opensea.getPaletteOf
 import kotlinx.coroutines.*
-import kotlin.random.Random
 
 class DynamicColorBackground(context: Context?, attrs: AttributeSet?) :
         RelativeLayout(context, attrs) {
 
     var diversifyBack = 2
-    var iteratinoCount = 10
+    var iterationCount = 10
     var _alpha = 0.3F
+    private var _duration: Long = 200
     var bitmapBackground: Bitmap? = null
     private val palette: Palette by lazy {
         Palette.from(bitmapBackground!!).generate()
@@ -69,7 +64,7 @@ class DynamicColorBackground(context: Context?, attrs: AttributeSet?) :
     private fun extractColors() {
         extractColorsByPos()
         extractColorsBySwatch()
-        setParentBackColor()
+        //        setParentBackColor()
     }
 
     private fun setParentBackColor() {
@@ -112,11 +107,11 @@ class DynamicColorBackground(context: Context?, attrs: AttributeSet?) :
                 paint.strokeWidth = 100F - i * 20
                 canvas.drawCircle(centerX, centerY, radius, paint)
             }
-            bitmap = bitmap.blur(iteratinoCount)
+            bitmap = bitmap.blur(iterationCount)
             background = BitmapDrawable(resources, bitmap)
         }.invokeOnCompletion {
             ObjectAnimator.ofFloat(this, "alpha", 0f, _alpha).apply {
-                duration = 500
+                duration = _duration
                 interpolator = AccelerateDecelerateInterpolator()
             }.start()
         }

@@ -77,6 +77,7 @@ class CollectionsRemoteMediator @Inject constructor(
 
         //these are ordered such way so that Room can set auto generated Primary keys
         database.collectionDao().insertCollections(data.collections)
+        //TODO there is bug here. should not fetch all collections everytime here
         val keys = database.collectionDao().getCollectionsByList().map {
             Collections.CollectionRemoteKeys(
                 id = it.id,

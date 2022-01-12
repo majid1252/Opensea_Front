@@ -1,17 +1,21 @@
 package com.mine.opensea.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.mine.opensea.adapters.CollectionsRecyclerViewAdapter
 import com.mine.opensea.databinding.FragmentCollectionsBinding
 import com.mine.opensea.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @ExperimentalPagingApi
 @AndroidEntryPoint
@@ -39,15 +43,12 @@ class CollectionsFragment : Fragment() {
             setHasFixedSize(true)
         }
 
-        mainViewModel.getCollections().observe(this, { it ->
+        mainViewModel.getCollections().observe(this, {
             mAdapter.submitData(lifecycle, it)
         })
 
         return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
 }

@@ -1,6 +1,7 @@
 package com.mine.opensea.database.repos
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.paging.*
 import androidx.paging.rxjava3.cachedIn
 import androidx.paging.rxjava3.flowable
@@ -26,7 +27,7 @@ class CollectionsRepository @Inject constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
-                enablePlaceholders = true,
+                enablePlaceholders = false,
                 maxSize = 30,
                 prefetchDistance = 5,
                 initialLoadSize = 40
