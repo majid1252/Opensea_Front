@@ -1,20 +1,15 @@
 package com.mine.opensea.adapters
 
 import android.os.Bundle
-import androidx.transition.TransitionSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mine.opensea.*
 import com.mine.opensea.database.models.Collection
@@ -44,12 +39,13 @@ class CollectionsRecyclerViewAdapter(val fragment: Fragment) :
 
     class ViewHolder(itemView: View, private val fragment: Fragment) :
             RecyclerView.ViewHolder(itemView) {
+
         private val binding = CollectionRecyclerViewHolderBinding.bind(itemView)
         private val collectionDetailsFragment: CollectionDetailsFragment by lazy {
             CollectionDetailsFragment()
         }
 
-        public fun bindTo(collection: Collection, holder: ViewHolder) {
+        fun bindTo(collection: Collection, holder: ViewHolder) {
             blur(binding = binding)
             binding.nameTextView.text = collection.name
             binding.nameTextView.isSelected = true
@@ -78,7 +74,7 @@ class CollectionsRecyclerViewAdapter(val fragment: Fragment) :
                 })
 
             binding.bannerImageView.transitionName =
-                collection.slug.toString().replace("-", "")
+                collection.slug.replace("-", "")
             val bundle = Bundle().apply {
                 putString("TRANS_NAME", binding.bannerImageView.transitionName)
                 putString("IMAGE_URI", collection.bannerImageUrl)
@@ -111,8 +107,8 @@ class CollectionsRecyclerViewAdapter(val fragment: Fragment) :
                     )
                 )
                 .setHasFixedTransformationMatrix(false)
-            binding.blurView.outlineProvider = ViewOutlineProvider.BACKGROUND;
-            binding.blurView.clipToOutline = true;
+            binding.blurView.outlineProvider = ViewOutlineProvider.BACKGROUND
+            binding.blurView.clipToOutline = true
 
         }
     }

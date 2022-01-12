@@ -5,19 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mine.opensea.adapters.CollectionsRecyclerViewAdapter
 import com.mine.opensea.databinding.FragmentCollectionsBinding
-import com.mine.opensea.viewModels.CollectionsFragmentViewModel
+import com.mine.opensea.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalPagingApi
 @AndroidEntryPoint
 class CollectionsFragment : Fragment() {
 
-    private val collectionsFragmentVM: CollectionsFragmentViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private val binding: FragmentCollectionsBinding by lazy {
         FragmentCollectionsBinding.inflate(layoutInflater)
     }
@@ -39,7 +39,7 @@ class CollectionsFragment : Fragment() {
             setHasFixedSize(true)
         }
 
-        collectionsFragmentVM.collectionsPagingLive.observe(this, { it ->
+        mainViewModel.getCollections().observe(this, { it ->
             mAdapter.submitData(lifecycle, it)
         })
 

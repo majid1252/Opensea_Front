@@ -100,7 +100,7 @@ data class Collection(
         val displayData: DisplayData? = null,
 
         @field:SerializedName("name")
-        val name: String,
+        val name: String? = null,
 
         @field:SerializedName("chat_url")
         val chatUrl: String? = null,

@@ -16,7 +16,10 @@ import io.reactivex.rxjava3.core.Flowable
 import javax.inject.Inject
 
 @ExperimentalPagingApi
-class CollectionsRepository {
+class CollectionsRepository @Inject constructor(
+        private val remoteMediator: CollectionsRemoteMediator,
+        private val openseaDatabase: OpenseaDatabase
+) {
 
     @ExperimentalPagingApi
     fun getCollections(): Flowable<PagingData<Collection>> {
@@ -28,9 +31,9 @@ class CollectionsRepository {
                 prefetchDistance = 5,
                 initialLoadSize = 40
             ),
-            remoteMediator = CollectionsRemoteMediator()
+            remoteMediator = remoteMediator
         ) {
-            OpenseaDatabase.getInstance(context).collectionDao().getCollections()
+            openseaDatabase.collectionDao().getCollections()
         }.flowable
     }
 

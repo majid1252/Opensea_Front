@@ -39,10 +39,4 @@ class DataProviderModule {
         return OpenseaDatabase.getInstance(context).collectionsRemoteKeys()
     }
 
-    @Singleton
-    @Provides
-    fun provideCollectionsRemoteMediator(): CollectionsRemoteMediator {
-        return CollectionsRemoteMediator()
-    }
-
 }

@@ -16,12 +16,10 @@ import java.io.InvalidObjectException
 import javax.inject.Inject
 
 @ExperimentalPagingApi
-class CollectionsRemoteMediator() : RxRemoteMediator<Int, Collection>() {
-
-    //TODO() reorganizing architecture specifically for Injections
-    val database: OpenseaDatabase = OpenseaDatabase.getInstance(OpenseaApplication.context)
-
-    val openseaRetroService: OpenseaRetroService = OpenseaRetroService.create()
+class CollectionsRemoteMediator @Inject constructor(
+        private val database: OpenseaDatabase,
+        private val openseaRetroService: OpenseaRetroService
+) : RxRemoteMediator<Int, Collection>() {
 
     companion object {
         const val INVALID_PAGE = -1
