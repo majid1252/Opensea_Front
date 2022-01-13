@@ -14,13 +14,14 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:outlineProvider="none"
-        android:background="@color/white"
+        android:layout_height="350dp"
+        android:outlineProvider="background"
+        android:background="@drawable/rounded_blur_app_bar_out_liner"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:clipChildren="true"
         app:cardCornerRadius="16dp">
 
         <RelativeLayout
@@ -28,12 +29,12 @@
             android:layout_height="match_parent">
 
             <ImageView
+                app:carbon_cornerRadius="16dp"
                 android:id="@+id/banner_image_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:background="@drawable/round_collection_blur_item"
-                android:maxHeight="200dp"
                 android:outlineProvider="background"
                 android:scaleType="centerCrop" />
 

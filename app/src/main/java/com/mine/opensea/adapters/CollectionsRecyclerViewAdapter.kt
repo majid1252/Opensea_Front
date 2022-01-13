@@ -1,11 +1,16 @@
 package com.mine.opensea.adapters
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.graphics.Interpolator
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.scale
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.paging.PagingDataAdapter
@@ -18,18 +23,23 @@ import com.mine.opensea.fragments.CollectionDetailsFragment
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import eightbitlab.com.blurview.RenderScriptBlur
+import kotlin.math.absoluteValue
+import kotlin.math.sign
 
-class CollectionsRecyclerViewAdapter(val fragment: Fragment) :
+class CollectionsRecyclerViewAdapter(
+        val fragment: Fragment,
+        private val recyclerView: RecyclerView
+) :
         PagingDataAdapter<Collection, CollectionsRecyclerViewAdapter.ViewHolder>(
             CollectionItemDiffCallback()
         ) {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.collection_recycler_view_holder, parent, false),
-            fragment
+            fragment,
+            recyclerView
         )
     }
 
@@ -37,12 +47,43 @@ class CollectionsRecyclerViewAdapter(val fragment: Fragment) :
         holder.bindTo(getItem(position)!!, holder)
     }
 
-    class ViewHolder(itemView: View, private val fragment: Fragment) :
+    class ViewHolder(itemView: View, private val fragment: Fragment, recyclerView: RecyclerView) :
             RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnTouchListener {
 
         private val binding = CollectionRecyclerViewHolderBinding.bind(itemView)
         private val collectionDetailsFragment: CollectionDetailsFragment by lazy {
             CollectionDetailsFragment()
+        }
+
+        init {
+            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    Log.d("OnScrolled:", "dx= $dx dy= $dy")
+                    itemView.animate().apply {
+                        translationY(-1 * dy.sign * minOf(dy.absoluteValue, 80).toFloat())
+                        withEndAction {
+                            if (itemView.translationY.absoluteValue > 30) {
+                                itemView.animate().apply {
+                                    translationY(0F)
+                                    duration = 200
+                                    interpolator = AccelerateDecelerateInterpolator()
+                                }
+                            }
+                        }
+                    }
+                        .setStartDelay(
+                            minOf(itemView.absY().absoluteValue.div(10).toLong(), 20)
+                        )
+                        .start()
+                    Log.d("Delay:", itemView.absY().absoluteValue.div(5).toString())
+                }
+
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    Log.d("OnScrolledState:", itemView.translationY.toString())
+                }
+            })
         }
 
         @SuppressLint("ClickableViewAccessibility")
@@ -123,19 +164,28 @@ class CollectionsRecyclerViewAdapter(val fragment: Fragment) :
             }
         }
 
+        @SuppressLint("ClickableViewAccessibility")
         override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
             p1?.let {
                 p0?.let {
                     Log.d("TouchItem.OnIntercept", p1.action.toString())
                     Log.d("TouchItem.ScaleX", p0.scaleX.toString())
                     when (p1.action) {
-                        0 -> if (p0.scaleX == 1.0F)
-                            it.animate().apply {
-                                scaleXBy(-0.05F)
-                                scaleYBy(-0.05F)
-                                duration = 300
-                                interpolator = AccelerateDecelerateInterpolator()
-                            }.setStartDelay(150).start()
+                        0 ->
+                            if (p0.scaleX == 1.0F) {
+                                it.animate().apply {
+                                    scaleXBy(-0.05F)
+                                    scaleYBy(-0.05F)
+                                    duration = 300
+                                    interpolator = AccelerateDecelerateInterpolator()
+                                }.setStartDelay(150).start()
+                                binding.bannerImageView.animate().apply {
+                                    scaleXBy(0.03F)
+                                    scaleYBy(0.03F)
+                                    duration = 300
+                                    interpolator = AccelerateDecelerateInterpolator()
+                                }.setStartDelay(150).start()
+                            }
                         3 -> {
                             it.clearAnimation()
                             it.animate().apply {
@@ -144,12 +194,24 @@ class CollectionsRecyclerViewAdapter(val fragment: Fragment) :
                                 duration = 300
                                 interpolator = AccelerateDecelerateInterpolator()
                             }.start()
+                            binding.bannerImageView.clearAnimation()
+                            binding.bannerImageView.animate().apply {
+                                scaleY(1F)
+                                scaleX(1F)
+                                duration = 300
+                                interpolator = AccelerateDecelerateInterpolator()
+                            }.setStartDelay(150).start()
                         }
                     }
                 }
             }
             return false
         }
+    }
+
+    override fun onViewDetachedFromWindow(holder: ViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        holder.itemView.clearAnimation()
     }
 
     class CollectionItemDiffCallback : DiffUtil.ItemCallback<Collection>() {

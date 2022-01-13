@@ -11,7 +11,7 @@
         <entry key="app/src/main/res/drawable/rounded_blur_app_bar_outliner.xml" value="0.27314814814814814" />
         <entry key="app/src/main/res/layout/activity_fr.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/collection_recycler_view_holder.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/collection_recycler_view_holder.xml" value="0.5" />
         <entry key="app/src/main/res/layout/collection_view_holder.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_assets.xml" value="0.35885416666666664" />
         <entry key="app/src/main/res/layout/fragment_bundles.xml" value="0.35885416666666664" />

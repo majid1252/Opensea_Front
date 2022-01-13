@@ -36,7 +36,7 @@ class CollectionsFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View {
 
-        val mAdapter = CollectionsRecyclerViewAdapter(this)
+        val mAdapter = CollectionsRecyclerViewAdapter(this, binding.recyclerView)
         binding.recyclerView.apply {
             adapter = mAdapter
             layoutManager = LinearLayoutManager(requireContext())

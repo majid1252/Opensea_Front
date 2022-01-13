@@ -100,8 +100,8 @@ class DynamicColorBackground(context: Context?, attrs: AttributeSet?) :
                     1, 3 -> ColorBySwatch.DarkVibrant.color
                     else -> ColorBySwatch.LightVibrant.color
                 }
-                val centerX = (width / (1..10).random()).toFloat()
-                val centerY = (height / (1..3).random()).toFloat()
+                val centerX = (1..width).random().toFloat()
+                val centerY = (1..height).random().toFloat()
                 val radius = 600F - i * 50
                 paint.color = color
                 paint.strokeWidth = 100F - i * 20
