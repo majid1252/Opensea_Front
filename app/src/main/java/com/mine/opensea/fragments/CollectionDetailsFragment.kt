@@ -1,5 +1,6 @@
 package com.mine.opensea.fragments
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.drawToBitmap
@@ -61,7 +63,7 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
                         binding.dynamicColorBack.apply {
                             diversifyBack = 4
                             iterationCount = 25
-                            _alpha = 0.25F
+                            _alpha = 0.18F
                             bitmapBackground =
                                 binding.collectionBannerImageView.drawToBitmap(Bitmap.Config.ARGB_8888)
                         }.draw()
@@ -77,19 +79,65 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
         Picasso.get()
             .load(collection?.imageUrl)
             .into(binding.imageView)
-        binding.descriptionTextView.text = collection?.description
         binding.nameTextView.text = collection?.name
+        binding.descriptionTextView.text = collection?.description
         setUpMotion()
         setUpBlur()
         fetchData(collection!!.slug)
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     private fun fetchData(slug: String) {
         collectionDetailsViewModel.getCollectionDetails(slug).observe(this, Observer {
-            binding.txt.text = it?.stats?.oneDayVolume.toString()
+
+        })
+        collectionDetailsViewModel.getCollectionStats(slug).observe(this, Observer {
+            it?.stats?.let { stats ->
+                for (valueName in listOf(
+                    "Total Sale",
+                    "Total Count",
+                    "Total Volume",
+                    "Daily Volume",
+                    "Weekly Volume",
+                    "Monthly Volume",
+                )) {
+                    var value: Any? = 0.0
+                    var unit = ""
+                    when (valueName) {
+                        "Total Sale" -> value = stats.totalSales?.toInt()
+                        "Total Count" -> value = stats.count?.toInt()
+                        "Total Volume" -> {
+                            value = stats.totalVolume
+                            unit = "ETH"
+                        }
+                        "Daily Volume" -> {
+                            value = stats.oneDayVolume
+                            unit = "ETH"
+                        }
+                        "Weekly Volume" -> {
+                            value = stats.sevenDayVolume
+                            unit = "ETH"
+                        }
+                        "Monthly Volume" -> {
+                            value = stats.thirtyDayVolume
+                            unit = "ETH"
+                        }
+                    }
+                    val v = layoutInflater.inflate(
+                        R.layout.collection_stats_row,
+                        binding.statsLinearLayout,
+                        false
+                    )
+                    v.findViewById<TextView>(R.id.value_name_text_view).text = "$valueName :"
+                    v.findViewById<TextView>(R.id.value_text_view).text = value.toString()
+                    v.findViewById<TextView>(R.id.value_unit_text_view).text = " $unit"
+                    binding.statsLinearLayout.addView(v)
+                }
+            }
         })
     }
+
 
     private fun setUpMotion() {
         enterTransition = TransitionInflater.from(requireContext())
@@ -108,9 +156,13 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
             interpolator = AccelerateDecelerateInterpolator()
             setUpdateListener {
                 val lp: ConstraintLayout.LayoutParams =
-                    binding.blurView2.layoutParams as ConstraintLayout.LayoutParams
-                lp.topMargin = (300F * it.animatedValue as Float).toInt()
-                binding.blurView2.layoutParams = lp
+                    binding.pagerBlurView.layoutParams as ConstraintLayout.LayoutParams
+                lp.topMargin = (225F * it.animatedValue as Float).toInt()
+                binding.pagerBlurView.layoutParams = lp
+                val lp2: ConstraintLayout.LayoutParams =
+                    binding.descriptionBlurView.layoutParams as ConstraintLayout.LayoutParams
+                lp2.topMargin = (225F * it.animatedValue as Float).toInt()
+                binding.descriptionBlurView.layoutParams = lp2
             }
 
         }.setStartDelay(350).start()
@@ -124,7 +176,7 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
             .setBlurAutoUpdate(true)
             .setHasFixedTransformationMatrix(true)
 
-        binding.blurView2.setupWith(binding.rootView)
+        binding.descriptionBlurView.setupWith(binding.rootView)
             .setBlurAlgorithm(RenderScriptBlur(requireContext()))
             .setBlurRadius(radius)
             .setBlurAutoUpdate(true)
@@ -135,8 +187,22 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
                 )
             )
             .setHasFixedTransformationMatrix(false)
-        binding.blurView2.outlineProvider = ViewOutlineProvider.BACKGROUND;
-        binding.blurView2.clipToOutline = true;
+        binding.descriptionBlurView.outlineProvider = ViewOutlineProvider.BACKGROUND;
+        binding.descriptionBlurView.clipToOutline = true;
+
+        binding.pagerBlurView.setupWith(binding.rootView)
+            .setBlurAlgorithm(RenderScriptBlur(requireContext()))
+            .setBlurRadius(radius)
+            .setBlurAutoUpdate(true)
+            .setOverlayColor(
+                ContextCompat.getColor(
+                    OpenseaApplication.context,
+                    R.color.white_overlay
+                )
+            )
+            .setHasFixedTransformationMatrix(false)
+        binding.pagerBlurView.outlineProvider = ViewOutlineProvider.BACKGROUND;
+        binding.pagerBlurView.clipToOutline = true;
 
         binding.detailsBlurView.setupWith(binding.container)
             .setBlurAlgorithm(RenderScriptBlur(requireContext()))

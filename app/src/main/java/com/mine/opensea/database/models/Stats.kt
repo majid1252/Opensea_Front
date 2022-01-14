@@ -5,11 +5,14 @@ import com.google.gson.annotations.SerializedName
 
 data class Stats(
 
-        @field:SerializedName("num_reports")
-        val numReports: Double? = null,
+        //        @field:SerializedName("num_reports")
+        //        val numReports: Double? = null,
 
         @field:SerializedName("one_day_average_price")
         val oneDayAveragePrice: Double? = null,
+
+        @field:SerializedName("thirty_day_average_price")
+        val thirtyDayAveragePrice: Double? = null,
 
         @field:SerializedName("seven_day_average_price")
         val sevenDayAveragePrice: Double? = null,
@@ -19,9 +22,6 @@ data class Stats(
 
         @field:SerializedName("total_volume")
         val totalVolume: Double? = null,
-
-        @field:SerializedName("thirty_day_average_price")
-        val thirtyDayAveragePrice: Double? = null,
 
         @field:SerializedName("one_day_volume")
         val oneDayVolume: Double? = null,

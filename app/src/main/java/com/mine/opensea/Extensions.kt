@@ -26,6 +26,7 @@ import android.renderscript.ScriptIntrinsicBlur
 import android.view.ViewTreeObserver
 
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.luminance
 import com.mine.opensea.ExtFunctions.getRandomDrawable
 import com.mine.opensea.OpenseaApplication.Companion.context
 import kotlinx.coroutines.Dispatchers
@@ -76,6 +77,9 @@ fun Bitmap.getDominantColorOfSwatch(): Int {
     return if (swatches.isNotEmpty()) swatches[0].rgb else 100000
 }
 
+/**
+ * Generate [Palette] for given bitmap
+ */
 fun Bitmap.getPaletteOf(
         left: Int = 0,
         top: Int = 0,
@@ -87,27 +91,14 @@ fun Bitmap.getPaletteOf(
     return builder.generate()
 }
 
-// extension function to blur a bitmap
-fun Bitmap.blur(context: Context, radius: Float = 10F): Bitmap? {
-    val bitmap = copy(config, true)
+/**
+ * Calculate color luminance of [Bitmap]. luminance can decide if the color is closer to black or white
+ */
+fun Bitmap.getLuminance() = getDominantColor().luminance
 
-    RenderScript.create(context).apply {
-        val input = Allocation.createFromBitmap(this, this@blur)
-        val output = Allocation.createFromBitmap(this, this@blur)
-
-        ScriptIntrinsicBlur.create(this, Element.U8_4(this)).apply {
-            setInput(input)
-            // Set the radius of the Blur. Supported range 0 < radius <= 25
-            setRadius(radius)
-            forEach(output)
-
-            output.copyTo(bitmap)
-            destroy()
-        }
-    }
-    return bitmap
-}
-
+/**
+ * Suspend function to calculate blur multiple times based on [iterationsCount] to get smoother blur
+ */
 suspend fun Bitmap.blur(iterationsCount: Int): Bitmap =
     withContext(Dispatchers.Main) {
         val inputBitmap = Bitmap.createScaledBitmap(

@@ -15,6 +15,7 @@ import com.mine.opensea.adapters.CollectionsRecyclerViewAdapter
 import com.mine.opensea.databinding.FragmentCollectionsBinding
 import com.mine.opensea.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.coroutines.flow.collect
 
 @ExperimentalPagingApi
@@ -46,8 +47,17 @@ class CollectionsFragment : Fragment() {
         mainViewModel.getCollections().observe(this, {
             mAdapter.submitData(lifecycle, it)
         })
-
+        binding.blurView.setupWith(binding.rootView)
+            .setBlurAutoUpdate(true)
+            .setBlurAlgorithm(RenderScriptBlur(requireContext()))
+            .setHasFixedTransformationMatrix(false)
+            .setBlurRadius(20F)
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
 

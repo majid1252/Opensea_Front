@@ -96,9 +96,9 @@ class DynamicColorBackground(context: Context?, attrs: AttributeSet?) :
             var color: Int
             for (i in 1..diversifyBack + 1) {
                 color = when (i) {
-                    0, 2 -> ColorBySwatch.LightVibrant.color
-                    1, 3 -> ColorBySwatch.DarkVibrant.color
-                    else -> ColorBySwatch.LightVibrant.color
+                    in 1..diversifyBack + 1 -> ColorBySwatch.LightVibrant.color
+                    // TODO() still have not figured it out what color is the best for the background
+                    else -> R.color.white
                 }
                 val centerX = (1..width).random().toFloat()
                 val centerY = (1..height).random().toFloat()

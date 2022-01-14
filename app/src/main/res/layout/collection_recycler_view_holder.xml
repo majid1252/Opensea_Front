@@ -8,7 +8,7 @@
     android:layout_margin="16dp"
     android:clipToPadding="false"
     android:clipChildren="false"
-    app:carbon_elevation="16dp"
+    android:animateLayoutChanges="true"
     android:outlineProvider="background">
 
     <androidx.cardview.widget.CardView
@@ -29,14 +29,34 @@
             android:layout_height="match_parent">
 
             <ImageView
-                app:carbon_cornerRadius="16dp"
                 android:id="@+id/banner_image_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:background="@drawable/round_collection_blur_item"
                 android:outlineProvider="background"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                app:carbon_cornerRadius="16dp" />
+
+            <TextView
+                android:id="@+id/name_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:ellipsize="end"
+                android:fadingEdgeLength="100dp"
+                android:fontFamily="@font/raleway_extrabold"
+                android:maxWidth="300dp"
+                android:maxLines="3"
+                android:requiresFadingEdge="horizontal"
+                android:text="Beyond Imagination Imaginatio"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/blur_container"
@@ -69,27 +89,11 @@
                             app:civ_border="false"
                             app:civ_shadow="true"
                             android:layout_margin="8dp"
-                            app:civ_shadow_color="@color/carbon_green_a400"
+                            app:civ_shadow_color="@color/accent_color"
                             app:civ_shadow_radius="2dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/name_text_view"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:requiresFadingEdge="horizontal"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            android:ellipsize="none"
-                            android:singleLine="true"
-                            android:layout_marginStart="4dp"
-                            android:fadingEdgeLength="100dp"
-                            android:textStyle="bold"
-                            android:textColor="@color/heading_one_color"
-                            android:textSize="20sp"
-                            app:layout_constraintStart_toEndOf="@id/image_view"
-                            app:layout_constraintTop_toTopOf="@id/image_view" />
 
 
                         <TextView
@@ -99,11 +103,12 @@
                             android:layout_marginStart="4dp"
                             android:layout_marginTop="2dp"
                             android:ellipsize="end"
+                            android:fontFamily="@font/ubuntu_light_italic"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/image_view"
-                            app:layout_constraintTop_toBottomOf="@id/name_text_view"
-                            android:maxLines="2"
-                            android:textColor="@color/heading_two_color"
+                            app:layout_constraintTop_toTopOf="@id/image_view"
+                            android:maxLines="3"
+                            android:textColor="@color/gray_800"
                             android:textSize="14sp" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </eightbitlab.com.blurview.BlurView>

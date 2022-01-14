@@ -10,6 +10,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.luminance
 import androidx.core.graphics.scale
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -63,7 +64,8 @@ class CollectionsRecyclerViewAdapter(
                     itemView.animate().apply {
                         translationY(-1 * dy.sign * minOf(dy.absoluteValue, 80).toFloat())
                         withEndAction {
-                            if (itemView.translationY.absoluteValue > 30) {
+                            if (itemView.translationY.absoluteValue > 80) {
+                                itemView.clearAnimation()
                                 itemView.animate().apply {
                                     translationY(0F)
                                     duration = 200
@@ -106,9 +108,17 @@ class CollectionsRecyclerViewAdapter(
                 .error(ExtFunctions.getRandomDrawable())
                 .into(binding.bannerImageView, object : Callback {
                     override fun onSuccess() {
-                        binding.rootView.setElevationShadowColor(binding.bannerImageView.getDominantColor())
-                        binding.rootView.outlineAmbientShadowColor =
-                            binding.bannerImageView.getDominantColor()
+                        binding.nameTextView.setTextColor(
+                            ContextCompat.getColor(
+                                fragment.requireContext(),
+                                if (binding.bannerImageView.getDominantColor().luminance > 0.35) R.color.black else R.color.white
+                            )
+                        )
+                        Log.d(
+                            "Luminance:",
+                            binding.bannerImageView.getDominantColor().luminance.toString()
+                        )
+
                     }
 
                     override fun onError(e: java.lang.Exception?) {
