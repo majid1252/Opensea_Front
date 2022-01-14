@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_view"
     tools:ignore="DuplicateIds"
+    android:paddingTop="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -50,6 +51,7 @@
                 <ViewFlipper
                     android:minHeight="250dp"
                     android:id="@+id/view_flipper"
+                    android:background="@color/white_overlay"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 

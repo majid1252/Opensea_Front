@@ -61,7 +61,7 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
                 override fun onSuccess() {
                     binding.collectionBannerImageView.onInitialized {
                         binding.dynamicColorBack.apply {
-                            diversifyBack = 4
+                            diversifyBack = 2
                             iterationCount = 25
                             _alpha = 0.18F
                             bitmapBackground =
@@ -157,7 +157,7 @@ class CollectionDetailsFragment : Fragment(R.layout.fragment_collection_details)
             setUpdateListener {
                 val lp: ConstraintLayout.LayoutParams =
                     binding.pagerBlurView.layoutParams as ConstraintLayout.LayoutParams
-                lp.topMargin = (225F * it.animatedValue as Float).toInt()
+                lp.topMargin = (25F * it.animatedValue as Float).toInt()
                 binding.pagerBlurView.layoutParams = lp
                 val lp2: ConstraintLayout.LayoutParams =
                     binding.descriptionBlurView.layoutParams as ConstraintLayout.LayoutParams
